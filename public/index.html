@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Igmic</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+	<div class="nav-wrapper">
+		<span>chat test</span>
+	</div>
+
+	<div class="chat-wrapper">
+
+		<div class="room-box">
+			<h3>Room List</h3>
+			<ul id="roomlist">
+			</ul>
+		</div>
+
+
+		<div class="chat-box">
+			<ul id="events">
+			</ul>
+			<div>
+				<form id="chat-form">
+					<input id="chat-input" title="chat" autocomplete="off">
+					<button>Submit</button>
+				</form>
+	  	</div>
+	  </div>
+
+	  <div class="controls">
+
+	  	<div id="change-name">
+	  		<div class="overlay" id="overlay-name-form">
+	  			 <a href="javascript:void(0)" id="overlay-name-form-closebtn">&times;</a>
+	  			<form id="name-form">
+	  				<p>Enter your name:</p>
+	  				<input id="name-input" name="name-input" autofocus>
+	  				<button>Ok</button>
+	  			</form>
+	  		</div>
+	  		<button id="openNameChangeOverlay">Name</button>
+	  	</div>
+
+
+
+	  	<div id="change-room">
+	  		<div class="overlay" id="overlay-room-form">
+	  				<a href="javascript:void(0)" id="overlay-room-form-closebtn">&times;</a>
+	  			<form id="room-form">
+	  				<p>Enter a new or existing room name:</p>
+	  				<input id="room-input" name="room-input">
+	  				<button>Ok</button>
+	  			</form>
+	  		</div>
+	  		<button id="openRoomChangeOverlay">Room</button>
+	  	</div>
+
+	  	<div id="roll-dice-wrapper">
+	  		<button id="roll-dice-btn">Roll</button>
+	  	</div>
+	  </div>
+
+	
+	  <div class="userlist-box">
+	  	<h3 id="room-name">room</h3>
+	  	<h4>Users</h4>
+
+	  	<ul id="userlist">
+	  	</ul>
+		</div>
+
+
+
+	</div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/client.js"></script>
+  <script src="js/client-jq.js"></script>
+</body>
+</html>
