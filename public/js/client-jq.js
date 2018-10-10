@@ -25,7 +25,22 @@ $('#openRoomChangeOverlay').on('click', () => {
 
 
 
+$('#roomlist').on('click', (event) => {
+	let val = $(event.target).text();
+	sock.emit('roomChange', val);
+})
+
+
+
+
+
+
+
+
 });
+
+
+// just take the full string => join room.. make text clickable!
 
 /*
 
