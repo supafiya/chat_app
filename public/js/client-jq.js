@@ -34,34 +34,4 @@ $('#roomlist').on('click', (event) => {
 
 
 
-
-
-
-});
-
-
-// just take the full string => join room.. make text clickable!
-
-/*
-
-$(document).on('click', function(event) {
-  if (!$(event.target).closest('.db_search_bar').length) {
-  	searchBarClicked = 0;
-    $searchBarDiv.fadeTo(fadespeed, 0.5);
-    $searchBarDiv.animate({
-    	'width': '200px'
-
-  	}, 250);
-  }
-});
-
-$searchBarDiv.on('click', () => {
-  	searchBarClicked = 1;
-  	$searchBarDiv.fadeTo(fadespeed, 1);
-  	$searchBarDiv.animate({
-    	'width': '800px'
-
-  	}, 250);
-  });
-
-  */
+}); // end ready function

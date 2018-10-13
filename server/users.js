@@ -1,5 +1,4 @@
 
-
 class Users {
 	constructor() {
 		this.users = [];
@@ -24,8 +23,6 @@ class Users {
 		return namesArray;
 		
 	}
-
-	
 	getRoomList() {
     let rooms = this.users.map((user) => user.room);
     let unique = [...new Set(rooms)];
@@ -33,8 +30,5 @@ class Users {
 	}
 
 };
-
-
-
 
 module.exports = Users;

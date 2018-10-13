@@ -186,6 +186,28 @@ body {
     text-align: center;
   }
 
+  #overlay-name-rules, #overlay-room-rules {
+    display: none;
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  
+    #overlay-name-rules::before, #overlay-room-rules::before {
+    position: relative;
+    display: inline-block;
+    margin-right: 0.25em;
+    font-size: 2em;
+    content: '';
+    border: 1px #da1313 solid;
+    border-radius: 0.75rem;
+    height: 0.75rem;
+    width: 0.75rem;
+    background-color: #da1313;
+  }
+
+
   #name-form, #room-form {
   position: absolute;
   top: 35%;

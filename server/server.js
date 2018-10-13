@@ -14,6 +14,7 @@ let serverLogDate = getTime('fullDate', 2)
 const path = require('path');
 
 const Users = require('./users');
+const strValidate = require('./validation');
 
 
 app.use('/', express.static(clientPath));
@@ -38,23 +39,34 @@ io.on('connection', (sock) => {
 	console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} user connected: ${users.getUser(sock.id).name}`);
 	sock.emit('message', `Welcome, you are (user_${conId})`);
 	io.to(users.getUser(sock.id).room).emit('message', `(user_${conId}) has joined the chat.`);
-	io.to(users.getUser(sock.id).room).emit('updateuserlist', users.getUserList(users.getUser(sock.id).room))
+	io.to(users.getUser(sock.id).room).emit('updateuserlist', users.getUserList(users.getUser(sock.id).room));
+	io.to(users.getUser(sock.id).room).emit('updateroomname', users.getUser(sock.id).room);
 
-	io.to(users.getUser(sock.id).room).emit('updateroomname', users.getUser(sock.id).room)
+
+
+
+
 
 
 	sock.on('nameChange', (name) => {
-		let user = users.getUser(sock.id);
-		let userOldRoom = user.room
-		let oldName = user.name
-
-		user.name = name;
-		io.to(userOldRoom).emit('updateuserlist', users.getUserList(user.room));
-		io.to(userOldRoom).emit('message', `${oldName} has changed their name to ${user.name} `);
+		if (strValidate.isRealString(name) === false) {
+			sock.emit('nameChangeReturn', false);
+		} else {
+			let user = users.getUser(sock.id);
+			let userOldRoom = user.room;
+			let oldName = user.name;
+			user.name = name;
+			io.to(userOldRoom).emit('updateuserlist', users.getUserList(user.room));
+			io.to(userOldRoom).emit('message', `${oldName} has changed their name to ${user.name} `);
+			sock.emit('nameChangeReturn', true);
+		};
 	});
 
 
 	sock.on('roomChange', (room) => {
+		if (strValidate.isRealString(room) === false) {
+			sock.emit('roomChangeReturn', false);
+		} else {
 		let user = users.getUser(sock.id);
 		let userOldRoom = user.room;
 		let oldName = user.name;
@@ -72,6 +84,10 @@ io.on('connection', (sock) => {
 
 		io.emit('updateroomlist', users.getRoomList());
 		sock.emit('message', `You are now in the '${user.room}' room.`)
+		sock.emit('roomChangeReturn', true);
+		}
+
+		
 	});
 
 

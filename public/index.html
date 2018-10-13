@@ -36,12 +36,13 @@
 
 	  	<div id="change-name">
 	  		<div class="overlay" id="overlay-name-form">
-	  			 <a href="javascript:void(0)" id="overlay-name-form-closebtn">&times;</a>
+	  			<a href="javascript:void(0)" id="overlay-name-form-closebtn">&times;</a>
 	  			<form id="name-form">
 	  				<p>Enter your name:</p>
 	  				<input id="name-input" name="name-input" autofocus>
 	  				<button>Ok</button>
 	  			</form>
+	  			<p id="overlay-name-rules">Name must be between 4 and 16 characters.</p>
 	  		</div>
 	  		<button id="openNameChangeOverlay">Name</button>
 	  	</div>
@@ -56,6 +57,7 @@
 	  				<input id="room-input" name="room-input">
 	  				<button>Ok</button>
 	  			</form>
+	  			<p id="overlay-room-rules">Room name must be between 4 and 16 characters.</p>
 	  		</div>
 	  		<button id="openRoomChangeOverlay">Room</button>
 	  	</div>

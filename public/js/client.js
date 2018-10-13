@@ -5,7 +5,6 @@ sock.on('message', (text) => {
 	writeEvent(text);
 });
 
-
 const writeEvent = (text) => {
 	const parent = document.querySelector('#events');
 	const el = document.createElement('li');
@@ -22,15 +21,31 @@ const onChatFormSubmitted = (event) => {
 	sock.emit('message', text);
 };
 
+
+
+
+
 const onNameFormSubmitted = (event) => {
 	event.preventDefault();
 	const input = document.querySelector('#name-input');
 	const text = input.value;
 	input.value = '';
-	sock.emit('nameChange', text)
-	$('#overlay-name-form').hide();
-	$('#chat-input').focus();
+	sock.emit('nameChange', text);
 };
+
+sock.on('nameChangeReturn', (res) => {
+	if (res === true) {
+		console.log('NAME CHANGE FUNCTION RETURNED TRUE');
+		$('#overlay-name-form').hide();
+		$('#chat-input').focus();
+		document.getElementById('overlay-name-rules').style.display = 'none';
+	} else if (res === false) {
+		document.getElementById('overlay-name-rules').style.display = 'block';
+		console.log('NAME CHANGE FUNCTION RETURNED FALSE');
+	};
+});
+
+
 
 
 const onRoomFormSubmitted = (event) => {
@@ -38,10 +53,22 @@ const onRoomFormSubmitted = (event) => {
 	const input = document.querySelector('#room-input');
 	const text = input.value;
 	input.value = '';
-	sock.emit('roomChange', text)
-	$('#overlay-room-form').hide();
-	$('#chat-input').focus();
+	sock.emit('roomChange', text);
 };
+
+sock.on('roomChangeReturn', (res) => {
+	if (res === true) {
+		console.log('ROOM CHANGE FUNCTION RETURNED TRUE')
+		$('#overlay-room-form').hide();
+		$('#chat-input').focus();
+		document.getElementById('overlay-room-rules').style.display = 'none';
+	} else if (res === false) {
+		console.log('ROOM CHANGE FUNCTION RETURNED FALSE')
+		document.getElementById('overlay-room-rules').style.display = 'block';
+	};
+});
+
+
 
 
 sock.on('updateuserlist', function (users) {
@@ -57,9 +84,7 @@ sock.on('updateuserlist', function (users) {
 sock.on('updateroomname', function (room) {
 	const roomName = document.querySelector('#room-name');
 	roomName.innerHTML = room;
-
-	
-})
+});
 
 sock.on('updateroomlist', function (rooms) {
 	const parent = document.querySelector('#roomlist');
@@ -67,9 +92,8 @@ sock.on('updateroomlist', function (rooms) {
 
 	rooms.forEach(function (room) {
 		parent.innerHTML += `<li>${room}</li>`
-	})
-})
-
+	});
+});
 
 
 document.querySelector('#chat-form').addEventListener('submit', onChatFormSubmitted);
