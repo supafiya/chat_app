@@ -1,7 +1,5 @@
 module.exports = function (type, style="1") {
-
 	let dateObj = new Date();
-
 	let year = dateObj.getFullYear();
 	let month = dateObj.getMonth() + 1;
 	let dayN = dateObj.getDay();
@@ -40,7 +38,7 @@ module.exports = function (type, style="1") {
 				break;
 		}
 	};
-
+	
 	// get the name of the current month
 	let getMonthName = (input) => {
 		switch (input) {
@@ -198,7 +196,6 @@ module.exports = function (type, style="1") {
 	let getTimeOfDay = (style) => {
 		let minPrefix = prefixNumber(minutes);
 		let secPrefix = prefixNumber(seconds);
-
 		if (style === 1) { // ex: 1:43pm
 			return `${americanHours(hours)[0]}:${minPrefix}${americanHours(hours)[1]}`;
 		} else if (style === 2) { // ex: 13:43pm
@@ -212,28 +209,19 @@ module.exports = function (type, style="1") {
 		}
 	};
 
-
 if (type === 'month') {
 		return month;
-
 	} else if (type === 'day') {
 		return day;
-
 	} else if (type === 'dayName') {
 		return getDayName(dayN);
-
 	}	else if (type === 'fullDate') {
 		return getFullDate(style);
-
 	} else if (type === 'ms') {
 		return ms;
-
 	}	else if (type === 'timeOfDay') {
 		return getTimeOfDay(style);
 	}
-
-
-
 
 }; // end of main function
 

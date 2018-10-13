@@ -1,72 +1,73 @@
 
 const sock = io();
 
-sock.on('message', (text) => {
-	writeEvent(text);
-});
 
-const writeEvent = (text) => {
-	const parent = document.querySelector('#events');
-	const el = document.createElement('li');
-	el.innerHTML = text;
-	parent.appendChild(el);
-	parent.scrollTop = parent.scrollHeight;﻿
-};
 
+
+// send chat message to the server
 const onChatFormSubmitted = (event) => {
 	event.preventDefault();
 	const input = document.querySelector('#chat-input');
 	const text = input.value;
 	input.value = '';
-	sock.emit('message', text);
+	sock.emit('userMessage', text);
 };
 
-
-
-
-
-const onNameFormSubmitted = (event) => {
-	event.preventDefault();
-	const input = document.querySelector('#name-input');
-	const text = input.value;
-	input.value = '';
-	sock.emit('nameChange', text);
-};
-
-sock.on('nameChangeReturn', (res) => {
-	if (res === true) {
-		console.log('NAME CHANGE FUNCTION RETURNED TRUE');
-		$('#overlay-name-form').hide();
-		$('#chat-input').focus();
-		document.getElementById('overlay-name-rules').style.display = 'none';
-	} else if (res === false) {
-		document.getElementById('overlay-name-rules').style.display = 'block';
-		console.log('NAME CHANGE FUNCTION RETURNED FALSE');
-	};
+// receive message information from the server
+sock.on('message', (text) => {
+	const parent = document.querySelector('#events');
+	const el = document.createElement('li');
+	el.innerHTML = text;
+	parent.appendChild(el);
+	parent.scrollTop = parent.scrollHeight;﻿
+	
 });
 
 
 
-
-const onRoomFormSubmitted = (event) => {
-	event.preventDefault();
-	const input = document.querySelector('#room-input');
-	const text = input.value;
-	input.value = '';
-	sock.emit('roomChange', text);
-};
-
-sock.on('roomChangeReturn', (res) => {
-	if (res === true) {
-		console.log('ROOM CHANGE FUNCTION RETURNED TRUE')
-		$('#overlay-room-form').hide();
-		$('#chat-input').focus();
-		document.getElementById('overlay-room-rules').style.display = 'none';
-	} else if (res === false) {
-		console.log('ROOM CHANGE FUNCTION RETURNED FALSE')
-		document.getElementById('overlay-room-rules').style.display = 'block';
+// new name submission
+	// send name information
+	const onNameFormSubmitted = (event) => {
+		event.preventDefault();
+		const input = document.querySelector('#name-input');
+		const text = input.value;
+		input.value = '';
+		sock.emit('nameChange', text);
 	};
-});
+	// receive the information from the server
+	sock.on('nameChangeReturn', (res) => {
+		if (res === true) {
+			console.log('NAME CHANGE FUNCTION RETURNED TRUE');
+			$('#overlay-name-form').hide();
+			$('#chat-input').focus();
+			document.getElementById('overlay-name-rules').style.display = 'none';
+		} else if (res === false) {
+			document.getElementById('overlay-name-rules').style.display = 'block';
+			console.log('NAME CHANGE FUNCTION RETURNED FALSE');
+		};
+	});
+
+// room change/create submission
+	// send the room information
+	const onRoomFormSubmitted = (event) => {
+		event.preventDefault();
+		const input = document.querySelector('#room-input');
+		const text = input.value;
+		input.value = '';
+		sock.emit('roomChange', text);
+	};
+	// receive the information from the server
+	sock.on('roomChangeReturn', (res) => {
+		if (res === true) {
+			console.log('ROOM CHANGE FUNCTION RETURNED TRUE')
+			$('#overlay-room-form').hide();
+			$('#chat-input').focus();
+			document.getElementById('overlay-room-rules').style.display = 'none';
+		} else if (res === false) {
+			console.log('ROOM CHANGE FUNCTION RETURNED FALSE')
+			document.getElementById('overlay-room-rules').style.display = 'block';
+		};
+	});
 
 
 

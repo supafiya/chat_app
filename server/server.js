@@ -10,14 +10,14 @@ let serverLogTime = getTime('timeOfDay', 3);
 let serverLogDate = getTime('fullDate', 2)
 
 
-
 const path = require('path');
 
 const Users = require('./users');
-const strValidate = require('./validation');
+const validation = require('./validation');
 
 
-app.use('/', express.static(clientPath));
+app.use(express.static(path.join(clientPath)));
+
 
 
 const server = http.createServer(app);
@@ -49,7 +49,7 @@ io.on('connection', (sock) => {
 
 
 	sock.on('nameChange', (name) => {
-		if (strValidate.isRealString(name) === false) {
+		if (validation.identities(name) === false) {
 			sock.emit('nameChangeReturn', false);
 		} else {
 			let user = users.getUser(sock.id);
@@ -64,7 +64,7 @@ io.on('connection', (sock) => {
 
 
 	sock.on('roomChange', (room) => {
-		if (strValidate.isRealString(room) === false) {
+		if (validation.identities(room) === false) {
 			sock.emit('roomChangeReturn', false);
 		} else {
 		let user = users.getUser(sock.id);
@@ -99,59 +99,60 @@ io.on('connection', (sock) => {
 
 
 
-	sock.on('message', (text) => {
-		let user = users.getUser(sock.id);
-		let userOldRoom = user.room;
-		let oldName = user.name
-
-		if (text.slice(0, 6) === '/join ') {
-			
-			let len = text.length;
-			let joinVar = text.slice(6, len);
-
-			user.room = joinVar;
-			sock.emit('updateroomname', joinVar);
-			sock.leave(userOldRoom);
-			sock.join(joinVar);
-
-			io.to(userOldRoom).emit('message', `${user.name} has left to join the '${user.room}' chat-room.`);
-			sock.emit('message', `You are now in room '${user.room}'`);
-			sock.broadcast.to(user.room).emit('message', `${user.name} has joined the room.`);
-
-
-			io.to(user.room).emit('updateuserlist', users.getUserList(user.room));
-			io.to(userOldRoom).emit('updateuserlist', users.getUserList(userOldRoom));
-
-			io.emit('updateroomlist', users.getRoomList());
-
-
-		} else if (text.slice(0, 6) === '/name ') {
-
-			let len = text.length;
-			let joinVar = text.slice(6, len);
-
-			user.name = joinVar;
-			io.to(userOldRoom).emit('message', `${oldName} has changed their name to ${user.name} `);
-			io.to(userOldRoom).emit('updateuserlist', users.getUserList(user.room));
-			console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${oldName} changed name to ${user.name}`);
-
-		} else if (text.slice(0, 5) === '/roll') {
-			let randomNumber = Math.floor(Math.random() * 101)
-			io.to(userOldRoom).emit('message', `${user.name} has rolled ${randomNumber}.`);
-			console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${userOldRoom}: ${user.name} rolled ${randomNumber} `);
-
+	sock.on('userMessage', (text) => {
+		if (validation.messageInput(text) === true) {
+				let user = users.getUser(sock.id);
+				let userOldRoom = user.room;
+				let oldName = user.name
+	
+				if (text.slice(0, 6) === '/join ') {
+					
+					let len = text.length;
+					let joinVar = text.slice(6, len);
+	
+					user.room = joinVar;
+					sock.emit('updateroomname', joinVar);
+					sock.leave(userOldRoom);
+					sock.join(joinVar);
+	
+					io.to(userOldRoom).emit('message', `${user.name} has left to join the '${user.room}' chat-room.`);
+					sock.emit('message', `You are now in room '${user.room}'`);
+					sock.broadcast.to(user.room).emit('message', `${user.name} has joined the room.`);
+	
+	
+					io.to(user.room).emit('updateuserlist', users.getUserList(user.room));
+					io.to(userOldRoom).emit('updateuserlist', users.getUserList(userOldRoom));
+	
+					io.emit('updateroomlist', users.getRoomList());
+	
+	
+				} else if (text.slice(0, 6) === '/name ') {
+	
+					let len = text.length;
+					let joinVar = text.slice(6, len);
+	
+					user.name = joinVar;
+					io.to(userOldRoom).emit('message', `${oldName} has changed their name to ${user.name} `);
+					io.to(userOldRoom).emit('updateuserlist', users.getUserList(user.room));
+					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${oldName} changed name to ${user.name}`);
+	
+				} else if (text.slice(0, 5) === '/roll') {
+					let randomNumber = Math.floor(Math.random() * 101)
+					io.to(userOldRoom).emit('message', `${user.name} has rolled ${randomNumber}.`);
+					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${userOldRoom}: ${user.name} rolled ${randomNumber} `);
+	
+			} else {
+				let fix1 = text.replace(/</g, "&lt;");
+				let fix2 = fix1.replace(/>/g, "&gt;");
+				io.to(user.room).emit('updateroomname', user.room)
+				io.to(user.room).emit('message', `${user.name}: ${fix2}`)
+				console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} chat message: ${users.getUser(sock.id).room}: ${users.getUser(sock.id).name}: ${text}`);
+				};
+				// send response from validation
 		} else {
+			sock.emit('message', validation.messageInput(text));
+		};
 
-
-		io.to(user.room).emit('updateroomname', user.room)
-		io.to(user.room).emit('message', `${user.name}: ${text}`)
-
-
-		console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} chat message: ${users.getUser(sock.id).room}: ${users.getUser(sock.id).name}: ${text}`);
-
-		
-	}
-	// console.log(`room list objects. ${users.getRoomList()} `)
 
 
 
@@ -185,12 +186,12 @@ console.log(users.getRoomList())
 });
 
 
-
-app.get('/', function(req, res) {
+/*
+	app.get('/', function(req, res) {
 	res.render('index');
 })
 
-
+*/
 
 
 server.on('error', (err) => {
