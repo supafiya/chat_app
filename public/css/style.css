@@ -76,7 +76,7 @@ body {
       cursor: pointer;
       border-bottom: 1px solid #ffa8a8;
     }
-  
+    
 
 
   .chat-box {
@@ -101,7 +101,23 @@ body {
       #events li {
         color: #C5C6C7;
         padding: 1px;
+        display: inline-block;
       }
+
+/* THIS RULE MUST STAY AT INDEX 15! */
+      #events .chat-time-stamp {
+        user-select: auto;
+        color: #ffa8a885;
+        display: inline-block;
+        width: 2.5em;
+        transition-timing-function: linear;
+        position: relative;
+        right: 0px;
+        transition: 0.5s;
+      }
+/* THIS RULE MUST STAY AT INDEX 15! */
+
+
 
     #chat-form {
       display: flex;
@@ -135,7 +151,7 @@ body {
     align-items: center;
     order: 2;
     background-color: #21070fe8;
-    width: 85px;
+    width: 120px; /* 85 default */
     height: 120px;
     margin-right: auto;
     margin-left: 10px;
@@ -218,7 +234,7 @@ body {
 
     #change-name button {
       color: #c5c6c7 ;
-      width: 75px;
+      width: 110px; /*10 less than controls width.*/
       height: 25px ;
       text-transform: uppercase;
       font-size: .8em;
@@ -233,7 +249,7 @@ body {
 
     #change-room button {
       color: #c5c6c7 ;
-      width: 75px;
+      width: 110px;
       height: 25px ;
       text-transform: uppercase;
       font-size: .8em;
@@ -246,9 +262,9 @@ body {
       background-image: linear-gradient(#a09e9e, #313131);
     }
 
-    #roll-dice-btn {
+    #roll-dice-btn, #timestamp-button {
       color: #c5c6c7;
-      width: 75px;
+      width: 110px;
       height: 25px;
       text-transform: uppercase;
       font-size: .8em;
@@ -257,7 +273,7 @@ body {
       border-radius: 2px;
     }
 
-     #roll-dice-btn:hover {
+     #roll-dice-btn:hover, #timestamp-button:hover {
       background-image: linear-gradient(#a09e9e, #313131);
     }
 

@@ -218,7 +218,7 @@ if (type === 'month') {
 	}	else if (type === 'fullDate') {
 		return getFullDate(style);
 	} else if (type === 'ms') {
-		return ms;
+		return millisec;
 	}	else if (type === 'timeOfDay') {
 		return getTimeOfDay(style);
 	}

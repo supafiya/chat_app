@@ -1,9 +1,9 @@
 TODO:
 
 
-timestamps on or off option
+DONE //  timestamps on or off option
 
-delete lines of text when they get above 200 for memory management
+DONE // delete lines of text when they get above 200 for memory management
 
 private messages
 
@@ -17,12 +17,12 @@ hyperlinks
 
 DONE //  no empty text allowed.
 
-spambot
-
-fix this Goopy has changed their name to /name/roll
+DONE //  spambot
 
 add a /help command
 
 room leaders + commands /kick /ban (0 being forever) /mute /unmute + dropdown menu for these commands
 
 notification of new message, browser tab blinks or highlighted, sound option.
+
+append name with _# if name already exists.

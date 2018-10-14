@@ -4,6 +4,19 @@ const sock = io();
 
 
 
+const timestamp = () => {
+	let dateObj = new Date();
+	let hours = dateObj.getHours();
+	let minutes = dateObj.getMinutes();
+	if (minutes < 10) {
+		minutes = `0${minutes}`
+	};
+
+	return `${hours}:${minutes}`;
+}
+
+
+
 // send chat message to the server
 const onChatFormSubmitted = (event) => {
 	event.preventDefault();
@@ -18,9 +31,9 @@ sock.on('message', (text) => {
 	const parent = document.querySelector('#events');
 	const el = document.createElement('li');
 	el.innerHTML = text;
-	parent.appendChild(el);
+	parent.innerHTML += `<li class='chat-time-stamp'>${timestamp()}</li><li>${text}</li><br>`
 	parent.scrollTop = parent.scrollHeight;﻿
-	
+
 });
 
 
@@ -37,13 +50,11 @@ sock.on('message', (text) => {
 	// receive the information from the server
 	sock.on('nameChangeReturn', (res) => {
 		if (res === true) {
-			console.log('NAME CHANGE FUNCTION RETURNED TRUE');
 			$('#overlay-name-form').hide();
 			$('#chat-input').focus();
 			document.getElementById('overlay-name-rules').style.display = 'none';
 		} else if (res === false) {
 			document.getElementById('overlay-name-rules').style.display = 'block';
-			console.log('NAME CHANGE FUNCTION RETURNED FALSE');
 		};
 	});
 
@@ -59,12 +70,10 @@ sock.on('message', (text) => {
 	// receive the information from the server
 	sock.on('roomChangeReturn', (res) => {
 		if (res === true) {
-			console.log('ROOM CHANGE FUNCTION RETURNED TRUE')
 			$('#overlay-room-form').hide();
 			$('#chat-input').focus();
 			document.getElementById('overlay-room-rules').style.display = 'none';
 		} else if (res === false) {
-			console.log('ROOM CHANGE FUNCTION RETURNED FALSE')
 			document.getElementById('overlay-room-rules').style.display = 'block';
 		};
 	});
@@ -104,5 +113,5 @@ document.querySelector('#name-form').addEventListener('submit', onNameFormSubmit
 document.querySelector('#room-form').addEventListener('submit', onRoomFormSubmitted);
 
 document.querySelector('#roll-dice-btn').addEventListener('click', () => {
-	sock.emit('message', '/roll');
+	sock.emit('userMessage', '/roll');
 })
