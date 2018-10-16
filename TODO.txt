@@ -3,7 +3,7 @@ TODO:
 
 DONE //  timestamps on or off option
 
-DONE // delete lines of text when they get above 200 for memory management
+DONE // remove lines of text when they get above 150.
 
 private messages
 
@@ -12,12 +12,14 @@ colored names
 emoticons
 
 join multiple rooms through tabs up at the top (not browser tabs)
+	tab show/hide certain messages? try click on tab -> hides all msgs from rooms that are not
+	that tab, and shows only messages that is that tab
 
 hyperlinks
 
-DONE //  no empty text allowed.
+DONE // no empty text allowed.
 
-DONE //  spambot
+spambot
 
 add a /help command
 
@@ -26,3 +28,5 @@ room leaders + commands /kick /ban (0 being forever) /mute /unmute + dropdown me
 notification of new message, browser tab blinks or highlighted, sound option.
 
 append name with _# if name already exists.
+
+chat system revamped. now sends an object instead of string.

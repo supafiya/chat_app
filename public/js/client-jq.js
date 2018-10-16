@@ -26,17 +26,22 @@ $('#openRoomChangeOverlay').on('click', () => {
 let onOff = 0;
 $('#timestamp-button').on('click', () => {
 	onOff++
-	var sheet = document.styleSheets[0];
-	var rules = sheet.cssRules || sheet.rules;
+	let sheet = document.styleSheets[0];
+	let rules = sheet.cssRules || sheet.rules;
+
 	if (onOff % 2 === 0) {
-		rules[15].style.width = '2.5em';
-		rules[15].style.opacity = '1';
-		rules[15].style.right = "0px"
+		$('.time').attr('style', 'user-select: auto;');
+		rules[1].style.opacity = '1';
+		rules[1].style.color = '#ffa8a8';
+		rules[1].style.width = '50px';
+
 	} else {
-		rules[15].style.width = "0em";
-		rules[15].style.opacity = "0";
-		rules[15].style.right = "40px"
-	};
+		$('.time').attr('style', 'user-select: none;');
+		rules[1].style.opacity = '0';
+		rules[1].style.color = 'red';
+		rules[1].style.width = '0px';
+	}
+
 });
 
 
@@ -59,31 +64,13 @@ $('#roomlist').on('click', (event) => {
 
 
 sock.on('message', () => {
-	let el = $("#events li")
+	let el = $("#events tr")
 	let len = el.length;
-	if (len > 400) {
-		$(".chat-time-stamp").first().remove();
-		$("#events li").first().remove();
+	if (len >= 150) {
+		$("#events tr").first().remove();
 	}
 })
 
 
 
 }); // end ready function
-
-/*
-$(this).find('span:first');
-
-$(this).find(':first-child');
-
-$(this).find('span').eq(0);
-
-while (el.length >= 20) {
-		console.log(el.find('#events:first-child').remove())
-	}
-
-
-
-
-
-*/

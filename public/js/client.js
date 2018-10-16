@@ -27,14 +27,43 @@ const onChatFormSubmitted = (event) => {
 };
 
 // receive message information from the server
-sock.on('message', (text) => {
-	const parent = document.querySelector('#events');
-	const el = document.createElement('li');
-	el.innerHTML = text;
-	parent.innerHTML += `<li class='chat-time-stamp'>${timestamp()}</li><li>${text}</li><br>`
-	parent.scrollTop = parent.scrollHeight;﻿
+sock.on('message', (data) => {
+	let user = data.username;
+	let message = data.message;
+	let room = data.userroom;
 
+	const parent = document.querySelector('#events');
+
+	if (data.username === 'Admin') {
+		parent.innerHTML += `
+		<tr>
+    	<td class="time">${timestamp()}</td>
+    	<td><span style="color:#ff5c5c">${user}:</span> ${message}</td>
+  	</tr>
+ 	 `
+		parent.scrollTop = parent.scrollHeight;﻿
+	} else {
+		parent.innerHTML += `
+		<tr>
+    	<td class="time">${timestamp()}</td>
+    	<td><span>${user}:</span> ${message}</td>
+  	</tr>
+ 	 `
+ 	 parent.scrollTop = parent.scrollHeight;﻿
+	};
+		
 });
+
+sock.on('joinRoom', (data) => {
+	let user = data.username;
+	let message = data.message;
+	let room = data.userroom
+
+
+
+})
+
+
 
 
 
