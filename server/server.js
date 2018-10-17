@@ -28,10 +28,12 @@ let connectionCount = 0;
 let users = new Users()
 
 io.on('connection', (sock) => {
-
+	let user = users.getUser(sock.id);
 	connectionCount++
 	sock.conId = connectionCount;
-	let conId = sock.conId;
+	sock.color = '#ccc'
+	console.log(sock.color)
+	
 
 
 	users.addUser(sock.id, `(user_${sock.conId})`, 'lobby');
@@ -146,23 +148,30 @@ io.on('connection', (sock) => {
 						return false;
 					};
 
+
+
 				} else if (text.slice(0, 5) === '/roll') {
 					let randomNumber = Math.floor(Math.random() * 101)
 					io.to(userOldRoom).emit('message', {username: 'Admin', message: user.name + ' has rolled ' + randomNumber + '.'});
 					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${userOldRoom}: ${user.name} rolled ${randomNumber} `);
 	
-			} else {
-				let fix1 = text.replace(/</g, "&lt;");
-				let fix2 = fix1.replace(/>/g, "&gt;");
-				io.to(user.room).emit('updateroomname', user.room)
-				io.to(user.room).emit('message', {username: user.name, message: fix2})
-				console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} chat message: ${users.getUser(sock.id).room}: ${users.getUser(sock.id).name}: ${text}`);
+				} else if (text.slice(0, 6) === '/color') {
+					let len = text.length;
+					let newColor = text.slice(6, len);
+					sock.color = newColor;
+
+
+				}	else {
+					let fix1 = text.replace(/</g, "&lt;");
+					let fix2 = fix1.replace(/>/g, "&gt;");
+					io.to(user.room).emit('updateroomname', user.room)
+					io.to(user.room).emit('message', {username: user.name, message: fix2, userColor: sock.color})
+					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} chat message: ${users.getUser(sock.id).room}: ${users.getUser(sock.id).name}: ${text}`);
 				};
-		// send response returned response from validation module
-		} else {																				// validation.messageInput(text)
-			sock.emit('message', {username: 'Admin', message: validation.messageInput(text)});
-				// for table renovation export key:value pair object.
-		};
+			// send response returned response from validation module
+			} else {																				
+				sock.emit('message', {username: 'Admin', message: validation.messageInput(text)});
+			};
 
 	});
 

@@ -31,6 +31,7 @@ sock.on('message', (data) => {
 	let user = data.username;
 	let message = data.message;
 	let room = data.userroom;
+	let userColor = data.userColor;
 
 	const parent = document.querySelector('#events');
 
@@ -38,7 +39,7 @@ sock.on('message', (data) => {
 		parent.innerHTML += `
 		<tr>
     	<td class="time">${timestamp()}</td>
-    	<td><span style="color:#ff5c5c">${user}:</span> ${message}</td>
+    	<td><span style="color:#ff5c5c; font-weight:bold">${user}:</span> ${message}</td>
   	</tr>
  	 `
 		parent.scrollTop = parent.scrollHeight;﻿
@@ -46,7 +47,7 @@ sock.on('message', (data) => {
 		parent.innerHTML += `
 		<tr>
     	<td class="time">${timestamp()}</td>
-    	<td><span>${user}:</span> ${message}</td>
+    	<td><span style="color:${userColor}">${user}:</span> ${message}</td>
   	</tr>
  	 `
  	 parent.scrollTop = parent.scrollHeight;﻿

@@ -1,6 +1,7 @@
 
 $(document).ready(function() {
 
+$('.name-color-picker').hide();
 
 $('#overlay-name-form-closebtn').on('click', () => {
 	$('#overlay-name-form').hide();
@@ -61,6 +62,79 @@ $('#roomlist').on('click', (event) => {
 	}
 });
 
+$('#name-color-button').on('click', (event) => {
+	$('.name-color-picker').css({'position': 'absolute', 'top': event.pageY, 'left': event.pageX});
+	$('.name-color-picker').show();
+	console.log('color button clicked.')
+
+});
+
+
+// colors:
+	$('#ncp1').on('click', () => {
+		sock.emit('userMessage', `/color #FE2712`)
+	})
+
+	$('#ncp2').on('click', () => {
+		sock.emit('userMessage', `/color #FC600A`)
+	})
+
+	$('#ncp3').on('click', () => {
+		sock.emit('userMessage', `/color #FB9902`)
+	})
+
+	$('#ncp4').on('click', () => {
+		sock.emit('userMessage', `/color #FCCC1A`)
+	})
+
+	$('#ncp5').on('click', () => {
+		sock.emit('userMessage', `/color #FEFE33`)
+	})
+
+	$('#ncp6').on('click', () => {
+		sock.emit('userMessage', `/color #B2D732`)
+	})
+
+	$('#ncp7').on('click', () => {
+		sock.emit('userMessage', `/color #66B032`)
+	})
+
+	$('#ncp8').on('click', () => {
+		sock.emit('userMessage', `/color #347C98`)
+	})
+
+  $('#ncp9').on('click', () => {
+		sock.emit('userMessage', `/color #0247FE`)
+	})
+
+  $('#ncp10').on('click', () => {
+		sock.emit('userMessage', `/color #4424D6`)
+	})
+    
+  $('#ncp11').on('click', () => {
+		sock.emit('userMessage', `/color #8601AF`)
+
+	})
+  
+  $('#ncp12').on('click', () => {
+		sock.emit('userMessage', `/color #C21460`)
+	})
+   
+
+
+
+
+
+
+
+
+
+$("body > *").not("body > button").click(function(event) {
+  if(event.target.id=='name-color-button' || event.target.id=='name-color-picker' || event.target.id=='ncpcolor'){
+    return false;
+  }
+  $('.name-color-picker').hide();
+});
 
 
 sock.on('message', () => {
@@ -70,6 +144,8 @@ sock.on('message', () => {
 		$("#events tr").first().remove();
 	}
 })
+
+
 
 
 

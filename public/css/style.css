@@ -128,7 +128,7 @@ td {
       
       
       td:nth-child(2) {
-          color: #c5c6c7;
+          color: #ccc;
           vertical-align: top;
           word-wrap: break-word;
         }
@@ -174,11 +174,98 @@ td {
     order: 2;
     background-color: #21070fe8;
     width: 120px; /* 85 default */
-    height: 120px;
+    height: 190px;
     margin-right: auto;
     margin-left: 10px;
     margin-top: 25px;
     border: 1px solid #ffa8a8;
+  }
+
+  .name-color-picker {
+    width: 300px;
+    height: 300px;
+    background-color: #000000bd;
+    position: fixed;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+  }
+
+    #ncp1 {
+      background-color: #FE2712;
+    }
+
+    #ncp2 {
+      background-color: #FC600A;
+    }
+
+    #ncp3 {
+      background-color: #FB9902;
+    }
+
+    #ncp4 {
+      background-color: #FCCC1A;
+    }
+
+    #ncp5 {
+      background-color: #FEFE33;
+    }
+
+    #ncp6 {
+      background-color: #B2D732;
+    }
+
+    #ncp7 {
+      background-color: #66B032;
+    }
+
+    #ncp8 {
+      background-color: #347C98;
+    }
+
+    #ncp9 {
+      background-color: #0247FE;
+    }
+
+    #ncp10 {
+      background-color: #4424D6;
+    }
+
+    #ncp11 {
+      background-color: #8601AF;
+    }
+
+    #ncp12 {
+      background-color: #C21460;
+    }
+
+
+
+
+
+
+
+  .name-color-picker div {
+    background-color: #474646;
+    
+    color: white;
+  }
+
+  #ncp-closebtn {
+    position: fixed;
+    font-size: 2em;
+    position: absolute;
+    top: 5%;
+    left: 95%;
+    color: #818181;
+    transform: translate(-50%,-50%);
+    text-decoration: none;
+    transition: 0.3s
+  }
+
+  #ncp-closebtn:hover {
+    color: #f1f1f1;
+    transition: 0.3s;
   }
 
   .overlay {
@@ -213,7 +300,6 @@ td {
   #overlay-name-form {
     display: block;
   }
-
     #overlay-room-form {
       display: none;
     }
@@ -254,37 +340,9 @@ td {
 
   }
 
-    #change-name button {
-      color: #c5c6c7 ;
-      width: 110px; /*10 less than controls width.*/
-      height: 25px ;
-      text-transform: uppercase;
-      font-size: .8em;
-      border: 1px solid #656565;
-      background-image: linear-gradient(#a09e9e, #4c4c4c);
-      border-radius: 2px; 
-    }
+ 
 
-    #change-name button:hover {
-      background-image: linear-gradient(#a09e9e, #313131);
-      }
-
-    #change-room button {
-      color: #c5c6c7 ;
-      width: 110px;
-      height: 25px ;
-      text-transform: uppercase;
-      font-size: .8em;
-      border: 1px solid #656565;
-      background-image: linear-gradient(#a09e9e, #4c4c4c);
-      border-radius: 2px;
-    }
-
-    #change-room button:hover {
-      background-image: linear-gradient(#a09e9e, #313131);
-    }
-
-    #roll-dice-btn, #timestamp-button {
+     .controls button {
       color: #c5c6c7;
       width: 110px;
       height: 25px;
@@ -295,7 +353,7 @@ td {
       border-radius: 2px;
     }
 
-     #roll-dice-btn:hover, #timestamp-button:hover {
+    .controls button:hover {
       background-image: linear-gradient(#a09e9e, #313131);
     }
 
