@@ -11,9 +11,7 @@ DONE // colored names
 
 emoticons
 
-join multiple rooms through tabs up at the top (not browser tabs)
-	tab show/hide certain messages? try click on tab -> hides all msgs from rooms that are not
-	that tab, and shows only messages that is that tab
+DONE // join multiple rooms through tabs up at the top (not browser tabs)(shows number of messages missed)
 
 hyperlinks
 
@@ -27,6 +25,7 @@ room leaders + commands /kick /ban (0 being forever) /mute /unmute + dropdown me
 
 DONE // notification of new message, browser tab blinks or highlighted, sound option.
 
-append name with _# if name already exists.
+DONE //append name with _# if name already exists.
+	small bugs to fix, do this at the very end.
 
 chat system revamped. now sends an object instead of string.
