@@ -7,7 +7,7 @@ DONE // remove lines of text when they get above 150.
 
 private messages
 
-colored names
+DONE // colored names
 
 emoticons
 
@@ -25,7 +25,7 @@ add a /help command
 
 room leaders + commands /kick /ban (0 being forever) /mute /unmute + dropdown menu for these commands
 
-notification of new message, browser tab blinks or highlighted, sound option.
+DONE // notification of new message, browser tab blinks or highlighted, sound option.
 
 append name with _# if name already exists.
 

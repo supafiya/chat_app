@@ -32,7 +32,6 @@ io.on('connection', (sock) => {
 	connectionCount++
 	sock.conId = connectionCount;
 	sock.color = '#ccc'
-	console.log(sock.color)
 	
 
 
@@ -53,17 +52,67 @@ io.on('connection', (sock) => {
 
 
 	sock.on('nameChange', (name) => {
+		let user = users.getUser(sock.id);
+		let userOldRoom = user.room;
+		let oldName = user.name;
+
 		if (validation.identities(name) === false) {
 			sock.emit('nameChangeReturn', false);
+
+		} else if (name === oldName) {
+			sock.emit('message', {username: 'Admin', message: 'Your name is already ' + user.name + '!'})
+
 		} else {
-			let user = users.getUser(sock.id);
-			let userOldRoom = user.room;
-			let oldName = user.name;
-			user.name = name;
-			io.to(userOldRoom).emit('updateuserlist', users.getUserList(user.room));
-			io.to(userOldRoom).emit('message', {message: oldName + ' has changed their name to ' + user.name + '.', username: 'Admin'});
-			sock.emit('nameChangeReturn', true);
-			console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${oldName} changed name to ${user.name}`);
+			nameLC = name.trim();
+			reLCName = nameLC.toLowerCase();
+			reLCNameArray = users.getUserList(userOldRoom);
+			
+
+			for(let i = 0, length1 = reLCNameArray.length; i < length1; i++){
+				reLCNameArray[i] = reLCNameArray[i].toLowerCase();
+			};
+
+			if (reLCNameArray.includes(reLCName)) {
+				//sock.emit('nameChangeReturn', 'nameInUse')
+				//console.log(reLCNameArray)
+				//console.log(reLCName)
+				function addName(newName, names){
+    			let re = new RegExp(`^${newName}(_\\d+)?$`)
+    			let matches = names.reduce((count, name) => name.match(re) ? count+1 : count, 0)
+    			names.push(matches ? nameLC+'_'+matches : newName)
+    			let addedName = names.slice(-1)[0]
+
+    			if (addedName === user.name) {
+    				sock.emit('message', {username: 'Admin', message: 'Your name is already ' + user.name + '!'});
+
+    			} else {
+						user.name = addedName;
+						io.to(userOldRoom).emit('updateuserlist', users.getUserList(user.room));
+						io.to(userOldRoom).emit('message', {message: oldName + ' has changed their name to ' + user.name + '.', username: 'Admin'});
+						sock.emit('nameChangeReturn', true);
+						console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${oldName} changed name to ${user.name}`);
+    			}
+
+					
+
+				}
+
+				addName(reLCName, reLCNameArray);
+				console.log('added a name to the list' + [])
+
+			} else {
+				user.name = nameLC;
+				io.to(userOldRoom).emit('updateuserlist', users.getUserList(user.room));
+				io.to(userOldRoom).emit('message', {message: oldName + ' has changed their name to ' + user.name + '.', username: 'Admin'});
+				sock.emit('nameChangeReturn', true);
+				console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${oldName} changed name to ${user.name}`);
+
+
+
+			}
+
+
+			
 
 		};
 	});

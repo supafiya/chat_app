@@ -39,7 +39,7 @@ sock.on('message', (data) => {
 		parent.innerHTML += `
 		<tr>
     	<td class="time">${timestamp()}</td>
-    	<td><span style="color:#ff5c5c; font-weight:bold">${user}:</span> ${message}</td>
+    	<td style="font-style:italic;"><span style="color:#ff5c5c; font-weight:bold; font-style:italic;">${user}:</span> ${message}</td>
   	</tr>
  	 `
 		parent.scrollTop = parent.scrollHeight;﻿
@@ -79,13 +79,20 @@ sock.on('joinRoom', (data) => {
 	};
 	// receive the information from the server
 	sock.on('nameChangeReturn', (res) => {
+		let invalidNameVar = document.getElementById('overlay-name-rules-invalid')
+		invalidNameVar.className = 'spacer';
 		if (res === true) {
 			$('#overlay-name-form').hide();
 			$('#chat-input').focus();
 			document.getElementById('overlay-name-rules').style.display = 'none';
+
 		} else if (res === false) {
 			document.getElementById('overlay-name-rules').style.display = 'block';
-		};
+		} else if (res === 'nameInUse') {
+			invalidNameVar.className += 'invalidNameAnim'
+			console.log('name in use')
+			
+		}
 	});
 
 // room change/create submission

@@ -1,6 +1,11 @@
 
 $(document).ready(function() {
 
+
+
+
+
+
 $('.name-color-picker').hide();
 
 $('#overlay-name-form-closebtn').on('click', () => {
@@ -31,13 +36,12 @@ $('#timestamp-button').on('click', () => {
 	let rules = sheet.cssRules || sheet.rules;
 
 	if (onOff % 2 === 0) {
-		$('.time').attr('style', 'user-select: auto;');
+		$('.time').attr('style', 'user-select: auto; left: 0px;');
 		rules[1].style.opacity = '1';
 		rules[1].style.color = '#ffa8a8';
 		rules[1].style.width = '50px';
-
 	} else {
-		$('.time').attr('style', 'user-select: none;');
+		$('.time').attr('style', 'user-select: none; left: 50px;');
 		rules[1].style.opacity = '0';
 		rules[1].style.color = 'red';
 		rules[1].style.width = '0px';
@@ -137,7 +141,29 @@ $("body > *").not("body > button").click(function(event) {
 });
 
 
+const oldTitle = document.title;
+let newMessages = 1;
+
+function unreadMessages() {
+	let newTitle = `(${newMessages}) ${oldTitle}`;
+
+	if (document.hasFocus()) {
+		newMessages = 1;
+		document.title = oldTitle;
+	} else {
+		newMessages++
+		document.title = newTitle;
+	};
+};
+
+setInterval(function () {
+		if (document.hasFocus()) {
+			unreadMessages();
+		}
+}, 1000);
+
 sock.on('message', () => {
+	unreadMessages();
 	let el = $("#events tr")
 	let len = el.length;
 	if (len >= 150) {

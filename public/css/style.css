@@ -10,6 +10,7 @@ body {
 }
 
 .time {
+  color: #ffa8a8;
   user-select: auto;
   transition: 0.5s;
   width: 50px;
@@ -45,16 +46,12 @@ body {
   }
 
 
-
-
 .chat-wrapper {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
 }
-
-
 
 
   .room-box {
@@ -107,39 +104,26 @@ body {
 tr {
   display: grid;
   grid-template-columns: auto auto;
-  justify-items: stretch;
+  /* justify-items: stretch; probably don't need */
   float: left;
 }
 
-td {
- 
 
+td:nth-child(1) {
+    vertical-align: top;
+    border-right: 1px solid #ffa8a8;
+    overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+    margin-right: 5px;
 }
-     
-      td:nth-child(1) {
-          color: #ffa8a8;
-          vertical-align: top;
-          border-right: 1px solid #ffa8a8;
-          overflow: hidden;
-          text-overflow: clip;
-          white-space: nowrap;
-          margin-right: 5px;
-        }
-      
-      
-      td:nth-child(2) {
-          color: #ccc;
-          vertical-align: top;
-          word-wrap: break-word;
-        }
-
-      
 
 
-
-
-
-
+td:nth-child(2) {
+    color: #ccc;
+    vertical-align: top;
+    word-wrap: break-word;
+}
     
     #chat-form {
       display: flex;
@@ -182,8 +166,8 @@ td {
   }
 
   .name-color-picker {
-    width: 300px;
-    height: 300px;
+    width: 125px;
+    height: 150px;
     background-color: #000000bd;
     position: fixed;
     display: grid;
@@ -239,17 +223,6 @@ td {
       background-color: #C21460;
     }
 
-
-
-
-
-
-
-  .name-color-picker div {
-    background-color: #474646;
-    
-    color: white;
-  }
 
   #ncp-closebtn {
     position: fixed;
@@ -317,6 +290,31 @@ td {
     left: 50%;
     transform: translate(-50%,-50%);
   }
+
+  #overlay-name-rules-invalid {
+    display: block;
+    position: absolute;
+    font-size: 1.5em;
+    opacity: 0;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+
+    @keyframes invalidName {
+      0%    {opacity: 0; font-size: 2em;}
+      5%    {opacity: 1; font-size: 1.5em;}
+      100%  {opacity: 0;}
+    }
+
+    .invalidNameAnim {
+      animation: invalidName 2s ease-in-out;
+    }
+
+    .spacer {
+      opacity: 0;
+      font-size: 1.5em;
+    }
   
     #overlay-name-rules::before, #overlay-room-rules::before {
     position: relative;
@@ -339,8 +337,6 @@ td {
   transform: translate(-50%,-50%);
 
   }
-
- 
 
      .controls button {
       color: #c5c6c7;
@@ -380,6 +376,11 @@ td {
       list-style: none;
       color: #C5C6C7;
     }
+
+
+
+
+
 
 
 @media only screen and (max-width: 800px) {
@@ -447,8 +448,6 @@ td {
     }
     
 }
-
-
 
 
 
