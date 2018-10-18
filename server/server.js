@@ -61,6 +61,7 @@ io.on('connection', (sock) => {
 
 		} else if (name === oldName) {
 			sock.emit('message', {username: 'Admin', message: 'Your name is already ' + user.name + '!'})
+			sock.emit('nameChangeReturn', false);
 
 		} else {
 			nameLC = name.trim();
@@ -73,9 +74,7 @@ io.on('connection', (sock) => {
 			};
 
 			if (reLCNameArray.includes(reLCName)) {
-				//sock.emit('nameChangeReturn', 'nameInUse')
-				//console.log(reLCNameArray)
-				//console.log(reLCName)
+				
 				function addName(newName, names){
     			let re = new RegExp(`^${newName}(_\\d+)?$`)
     			let matches = names.reduce((count, name) => name.match(re) ? count+1 : count, 0)
@@ -84,6 +83,7 @@ io.on('connection', (sock) => {
 
     			if (addedName === user.name) {
     				sock.emit('message', {username: 'Admin', message: 'Your name is already ' + user.name + '!'});
+    				sock.emit('nameChangeReturn', false);
 
     			} else {
 						user.name = addedName;
@@ -122,26 +122,31 @@ io.on('connection', (sock) => {
 		if (validation.identities(room) === false) {
 			sock.emit('roomChangeReturn', false);
 		} else {
-		let user = users.getUser(sock.id);
-		let userOldRoom = user.room;
-		let oldName = user.name;
+			let user = users.getUser(sock.id);
+			let userOldRoom = user.room;
+			let oldName = user.name;
 
-		io.to(room).emit('message', {message: user.name + ' has joined the room.', username: 'Admin'});
-		user.room = room;
-		sock.emit('updateroomname', room);
-		sock.leave(userOldRoom);
-		sock.join(room);
+			if (userOldRoom === room) {
+				sock.emit('message', {username: 'Admin', message: ' You are already in that room!'});
+				sock.emit('roomChangeReturn', 'alreadyInRoom');
+			} else {
 
-		io.to(userOldRoom).emit('message', {username: 'Admin', message: user.name + ' has left the room.'});
-		io.to(user.room).emit('updateuserlist', users.getUserList(user.room));
-		io.to(userOldRoom).emit('updateuserlist', users.getUserList(userOldRoom));
-
-		io.emit('updateroomlist', users.getRoomList());
-
-		sock.emit('message', {username: 'Admin', message: 'You are now in room ' + user.room + '.'})
-		sock.emit('roomChangeReturn', true);
+					io.to(room).emit('message', {message: user.name + ' has joined the room.', username: 'Admin'});
+					user.room = room;
+					sock.emit('updateroomname', room);
+					sock.leave(userOldRoom);
+					sock.join(room);
+	
+					io.to(userOldRoom).emit('message', {username: 'Admin', message: user.name + ' has left the room.'});
+					io.to(user.room).emit('updateuserlist', users.getUserList(user.room));
+					io.to(userOldRoom).emit('updateuserlist', users.getUserList(userOldRoom));
+	
+					io.emit('updateroomlist', users.getRoomList());
+	
+					sock.emit('message', {username: 'Admin', message: 'You are now in room ' + user.room + '.'})
+					sock.emit('roomChangeReturn', true);
+			}
 		}
-
 	});
 
 	sock.on('userMessage', (text) => {

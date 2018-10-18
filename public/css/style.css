@@ -291,7 +291,7 @@ td:nth-child(2) {
     transform: translate(-50%,-50%);
   }
 
-  #overlay-name-rules-invalid {
+  #overlay-name-rules-invalid, #overlay-room-invalid {
     display: block;
     position: absolute;
     font-size: 1.5em;
@@ -308,13 +308,10 @@ td:nth-child(2) {
     }
 
     .invalidNameAnim {
-      animation: invalidName 2s ease-in-out;
+      position: relative;
+      animation: invalidName 2s ease;
     }
 
-    .spacer {
-      opacity: 0;
-      font-size: 1.5em;
-    }
   
     #overlay-name-rules::before, #overlay-room-rules::before {
     position: relative;

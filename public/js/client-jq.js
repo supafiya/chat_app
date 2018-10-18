@@ -1,9 +1,16 @@
 
 $(document).ready(function() {
 
+const timestamp = () => {
+	let dateObj = new Date();
+	let hours = dateObj.getHours();
+	let minutes = dateObj.getMinutes();
+	if (minutes < 10) {
+		minutes = `0${minutes}`
+	};
 
-
-
+	return `${hours}:${minutes}`;
+}
 
 
 $('.name-color-picker').hide();
@@ -15,6 +22,7 @@ $('#overlay-name-form-closebtn').on('click', () => {
 
 $('#openNameChangeOverlay').on('click', () => {
 	$('#overlay-name-form').show();
+	$('#overlay-name-rules-invalid').removeClass('invalidNameAnim');
 	$('#name-input').focus();
 });
 
@@ -26,6 +34,7 @@ $('#overlay-room-form-closebtn').on('click', () => {
 
 $('#openRoomChangeOverlay').on('click', () => {
 	$('#overlay-room-form').show();
+	$('#overlay-room-invalid').removeClass('invalidNameAnim');
 	$('#room-input').focus();
 });
 
@@ -57,9 +66,12 @@ $('#roomlist').on('click', (event) => {
 	let text = ele.text();
 	if (val === text) {
 		const parent = document.querySelector('#events');
-		const el = document.createElement('li');
-		el.innerHTML = 'You are already in that room!';
-		parent.appendChild(el);
+		parent.innerHTML += `
+		<tr>
+    	<td class="time">${timestamp()}</td>
+    	<td style="font-style:italic;"><span style="color:#ff5c5c; font-weight:bold; font-style:italic;">Admin:</span> You are already in that room!</td>
+  	</tr>
+		`
 		parent.scrollTop = parent.scrollHeight;﻿
 	} else {
 		sock.emit('roomChange', val);
@@ -126,13 +138,6 @@ $('#name-color-button').on('click', (event) => {
    
 
 
-
-
-
-
-
-
-
 $("body > *").not("body > button").click(function(event) {
   if(event.target.id=='name-color-button' || event.target.id=='name-color-picker' || event.target.id=='ncpcolor'){
     return false;
@@ -170,8 +175,6 @@ sock.on('message', () => {
 		$("#events tr").first().remove();
 	}
 })
-
-
 
 
 

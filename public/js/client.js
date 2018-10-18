@@ -79,20 +79,24 @@ sock.on('joinRoom', (data) => {
 	};
 	// receive the information from the server
 	sock.on('nameChangeReturn', (res) => {
-		let invalidNameVar = document.getElementById('overlay-name-rules-invalid')
-		invalidNameVar.className = 'spacer';
+		let invNameAnim = document.getElementById('overlay-name-rules-invalid')
+		function invalidNameFunc() {
+			invNameAnim.classList.remove('invalidNameAnim')
+			void invNameAnim.offsetWidth;
+			invNameAnim.classList.add('invalidNameAnim');
+			console.log('name invalid')
+		}
+		
 		if (res === true) {
 			$('#overlay-name-form').hide();
 			$('#chat-input').focus();
 			document.getElementById('overlay-name-rules').style.display = 'none';
 
-		} else if (res === false) {
+		}	else if (res === false) {
 			document.getElementById('overlay-name-rules').style.display = 'block';
-		} else if (res === 'nameInUse') {
-			invalidNameVar.className += 'invalidNameAnim'
-			console.log('name in use')
+			invalidNameFunc();
+		} 
 			
-		}
 	});
 
 // room change/create submission
@@ -106,10 +110,17 @@ sock.on('joinRoom', (data) => {
 	};
 	// receive the information from the server
 	sock.on('roomChangeReturn', (res) => {
+		let invalidRoomName = document.getElementById('overlay-room-invalid')
+
 		if (res === true) {
 			$('#overlay-room-form').hide();
 			$('#chat-input').focus();
 			document.getElementById('overlay-room-rules').style.display = 'none';
+		} else if (res === 'alreadyInRoom'){
+				invalidRoomName.classList.remove('invalidNameAnim');
+				void invalidRoomName.offsetWidth;
+				invalidRoomName.classList.add('invalidNameAnim')
+
 		} else if (res === false) {
 			document.getElementById('overlay-room-rules').style.display = 'block';
 		};
