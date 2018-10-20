@@ -5,27 +5,29 @@ DONE //  timestamps on or off option
 
 DONE // remove lines of text when they get above 150.
 
-private messages
-
 DONE // colored names
-
-emoticons
 
 DONE // join multiple rooms through tabs up at the top (not browser tabs)(shows number of messages missed)
 
-hyperlinks
-
 DONE // no empty text allowed.
-
-spambot
-
-add a /help command
-
-room leaders + commands /kick /ban (0 being forever) /mute /unmute + dropdown menu for these commands
 
 DONE // notification of new message, browser tab blinks or highlighted, sound option.
 
 DONE //append name with _# if name already exists.
-	small bugs to fix, do this at the very end.
+				small bugs to fix, do this at the very end.
 
-chat system revamped. now sends an object instead of string.
+partly done // spambot
+	work on /roll and name/room change speed.
+
+room leaders + commands /kick /ban (0 being forever) /mute /unmute + dropdown menu for these commands
+
+add a /help command
+
+hyperlinks
+
+emoticons
+
+private messages
+
+
+

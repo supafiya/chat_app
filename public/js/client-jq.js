@@ -171,7 +171,7 @@ sock.on('message', () => {
 	unreadMessages();
 	let el = $("#events tr")
 	let len = el.length;
-	if (len >= 150) {
+	if (len >= 100) {
 		$("#events tr").first().remove();
 	}
 })

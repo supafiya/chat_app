@@ -38,7 +38,10 @@ io.on('connection', (sock) => {
 	users.addUser(sock.id, `(user_${sock.conId})`, 'lobby');
 	sock.join('lobby')
 
-	console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} user connected: ${users.getUser(sock.id).name}`);
+	let address = sock.request.connection.remoteAddress;
+ 
+
+	console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} ip: ${address} user connected: ${users.getUser(sock.id).name}`);
 	sock.emit('message', {message: 'Welcome, you are (user_' + sock.conId + ')', username: 'Admin'});
 
 	io.to(users.getUser(sock.id).room).emit('message', {username: 'Admin', message: `(user_${sock.conId}) has joined.`});
