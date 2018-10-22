@@ -21,11 +21,11 @@ class Users {
 		let users = this.users.filter((user) => user.room === room);
 		let namesArray = users.map((user) => user.name);
 		return namesArray;
-		
+
 	}
 	getRoomList() {
-    let rooms = this.users.map((user) => user.room);
-    let unique = [...new Set(rooms)];
+		let rooms = this.users.map((user) => user.room);
+		let unique = [...new Set(rooms)];
    	return unique;
 	}
 

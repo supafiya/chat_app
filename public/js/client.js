@@ -52,7 +52,7 @@ sock.on('message', (data) => {
  	 `
  	 parent.scrollTop = parent.scrollHeight;﻿
 	};
-		
+
 });
 
 sock.on('joinRoom', (data) => {
@@ -86,7 +86,7 @@ sock.on('joinRoom', (data) => {
 			invNameAnim.classList.add('invalidNameAnim');
 			console.log('name invalid')
 		}
-		
+
 		if (res === true) {
 			$('#overlay-name-form').hide();
 			$('#chat-input').focus();
@@ -95,8 +95,8 @@ sock.on('joinRoom', (data) => {
 		}	else if (res === false) {
 			document.getElementById('overlay-name-rules').style.display = 'block';
 			invalidNameFunc();
-		} 
-			
+		}
+
 	});
 
 // room change/create submission
@@ -144,14 +144,30 @@ sock.on('updateroomname', function (room) {
 	roomName.innerHTML = room;
 });
 
-sock.on('updateroomlist', function (rooms) {
+
+
+sock.on('updateroomlist', function (data) {
 	const parent = document.querySelector('#roomlist');
 	parent.innerHTML = '';
+	let roomList = data;
+	console.log(data)
+	for(let i = 0, length1 = roomList.length; i < length1; i++){
+		let currentObj = roomList[i]
+		let listName = currentObj.i_room;
+		let listNum = currentObj.i_num;
+		parent.innerHTML += `<li>${listName} - [<span style="color:#ffa8a8">${listNum}</span>]</li>`;
+	}
 
-	rooms.forEach(function (room) {
-		parent.innerHTML += `<li>${room}</li>`
-	});
+
+
+
+	//rooms.forEach(function (room) {
+		//parent.innerHTML += `<li>${room}<span id="_null">  [0]</span></li>`;
+	//});
 });
+
+
+
 
 
 document.querySelector('#chat-form').addEventListener('submit', onChatFormSubmitted);

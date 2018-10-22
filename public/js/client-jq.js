@@ -13,6 +13,9 @@ const timestamp = () => {
 }
 
 
+$('.controls').hide();
+
+
 $('.name-color-picker').hide();
 
 $('#overlay-name-form-closebtn').on('click', () => {
@@ -59,12 +62,26 @@ $('#timestamp-button').on('click', () => {
 });
 
 
+var str = "lobby - [2]";
+str = str.slice(-3, -2);
+console.log(str)
+
+
 
 $('#roomlist').on('click', (event) => {
+
+// could be improved with regExp
+
 	let val = $(event.target).text();
-	let ele = $('#room-name');
+	let ele = $('#room-name')
 	let text = ele.text();
-	if (val === text) {
+	let join = val.slice(0, -6);
+
+	if (val.slice(-3, -2) !== '[') {
+		join = val.slice(0, -7);
+	};
+
+	if (join === text) {
 		const parent = document.querySelector('#events');
 		parent.innerHTML += `
 		<tr>
@@ -74,7 +91,7 @@ $('#roomlist').on('click', (event) => {
 		`
 		parent.scrollTop = parent.scrollHeight;﻿
 	} else {
-		sock.emit('roomChange', val);
+		sock.emit('roomChange', join);
 	}
 });
 
@@ -126,16 +143,16 @@ $('#name-color-button').on('click', (event) => {
   $('#ncp10').on('click', () => {
 		sock.emit('userMessage', `/color #4424D6`)
 	})
-    
+
   $('#ncp11').on('click', () => {
 		sock.emit('userMessage', `/color #8601AF`)
 
 	})
-  
+
   $('#ncp12').on('click', () => {
 		sock.emit('userMessage', `/color #C21460`)
 	})
-   
+
 
 
 $("body > *").not("body > button").click(function(event) {
@@ -143,6 +160,20 @@ $("body > *").not("body > button").click(function(event) {
     return false;
   }
   $('.name-color-picker').hide();
+});
+
+
+$('#controls-menu').on('click', () => {
+	$('.controls').show();
+	console.log('menu button clicked')
+});
+
+
+$("body > *").not("body > a" || "body > button").click(function(event) {
+  if(event.target.id=='name-color-button' || event.target.id=='controls-menu' || event.target.id=='name-color-picker' || event.target.id=='ncpcolor'){
+    return false;
+  }
+  $('.controls').hide();
 });
 
 

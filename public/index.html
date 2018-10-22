@@ -9,6 +9,7 @@
 <body>
 
 	<div class="nav-wrapper">
+		<a href="javascript:void(0)" id="controls-menu">&equiv;</a>
 		<span>chat test</span>
 	</div>
 
@@ -22,10 +23,25 @@
 
 
 		<div class="chat-box">
+			<div>
+				<ul class="user-room-list">	<!-- <a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a> -->
+					<li>not lobby<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>
+					<li>not lobbyY 222 E<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>
+					<li id="active-user-room">lobby<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>
+					<li>not<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>
+					<li>not lobby<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>
+					<li>not L<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>
+					<li>not lobbyUUUU<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>
+				</ul>
+			</div>
 
-			<table id="events">
-				
-			</table>
+
+			<div class="events-tables">
+				<table id="events">
+
+				</table>
+			</div>
+
 
 			<div>
 				<form id="chat-form">
@@ -35,39 +51,30 @@
 	  	</div>
 	  </div>
 
+	  <div class="userlist-box">
+	  	<h3 id="room-name">room</h3>
+	  	<h4>Users</h4>
+
+	  	<ul id="userlist">
+	  	</ul>
+		</div>
+
+
+
+
 	  <div class="controls">
 
 	  	<div id="change-name">
-	  		<div class="overlay" id="overlay-name-form">
-	  			<a href="javascript:void(0)" id="overlay-name-form-closebtn">&times;</a>
-	  			<form id="name-form">
-	  				<p>Enter your name:</p>
-	  				<input id="name-input" name="name-input" autofocus>
-	  				<button>Ok</button>
-	  			</form>
-	  			<p id="overlay-name-rules">Name must be between 4 and 16 characters.</p>
-	  			<p id="overlay-name-rules-invalid">Invalid name!</p>
-	  		</div>
 	  		<button id="openNameChangeOverlay">Name</button>
 	  	</div>
 
 
 
 	  	<div id="change-room">
-	  		<div class="overlay" id="overlay-room-form">
-	  				<a href="javascript:void(0)" id="overlay-room-form-closebtn">&times;</a>
-	  			<form id="room-form">
-	  				<p>Enter a new or existing room name:</p>
-	  				<input id="room-input" name="room-input">
-	  				<button>Ok</button>
-	  			</form>
-	  			<p id="overlay-room-rules">Room name must be between 4 and 16 characters.</p>
-	  			<p id="overlay-room-invalid">Already in that room!</p>
-	  		</div>
 	  		<button id="openRoomChangeOverlay">Room</button>
 	  	</div>
 
-	  	
+
 
 	  	<div id="roll-dice-wrapper">
 	  		<button id="roll-dice-btn">Roll</button>
@@ -80,8 +87,30 @@
 	  	<div id="name-color-btn-wrapper">
 	  		<button id="name-color-button">Name Color</button>
 	  	</div>
-	  	
+
 	  </div>
+
+	  <div class="overlay" id="overlay-name-form">
+	  			<a href="javascript:void(0)" id="overlay-name-form-closebtn">&times;</a>
+	  			<form id="name-form">
+	  				<p>Enter your name:</p>
+	  				<input id="name-input" name="name-input" autofocus>
+	  				<button>Ok</button>
+	  			</form>
+	  			<p id="overlay-name-rules">Name must be between 4 and 16 characters.</p>
+	  			<p id="overlay-name-rules-invalid">Invalid name!</p>
+	  		</div>
+
+	  	<div class="overlay" id="overlay-room-form">
+	  				<a href="javascript:void(0)" id="overlay-room-form-closebtn">&times;</a>
+	  			<form id="room-form">
+	  				<p>Enter a new or existing room name:</p>
+	  				<input id="room-input" name="room-input">
+	  				<button>Ok</button>
+	  			</form>
+	  			<p id="overlay-room-rules">Room name must be between 4 and 16 characters.</p>
+	  			<p id="overlay-room-invalid">Already in that room!</p>
+	  		</div>
 
 		<div class="name-color-picker" id="name-color-picker">
 			<a href="javascript:void(0)" id="ncp1"></a>
@@ -97,14 +126,7 @@
 			<a href="javascript:void(0)" id="ncp11"></a>
 			<a href="javascript:void(0)" id="ncp12"></a>
 	  </div>
-	
-	  <div class="userlist-box">
-	  	<h3 id="room-name">room</h3>
-	  	<h4>Users</h4>
 
-	  	<ul id="userlist">
-	  	</ul>
-		</div>
 
 
 
