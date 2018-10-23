@@ -424,7 +424,7 @@ td:nth-child(2) {
 
 
      .controls button, #name-form button, #room-form button {
-      color: #c5c6c7;
+      color: #ffffff;
       width: 110px;
       height: 25px;
       text-transform: uppercase;
@@ -436,6 +436,7 @@ td:nth-child(2) {
 
     .controls button:hover, #name-form button:hover, #room-form button:hover {
       background-image: linear-gradient(#a09e9e, #313131);
+      color: #cccccc;
     }
 
 

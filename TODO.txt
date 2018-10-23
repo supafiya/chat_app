@@ -7,14 +7,12 @@ DONE // remove lines of text when they get above 150.
 
 DONE // colored names
 
-DONE // join multiple rooms through tabs up at the top (not browser tabs)(shows number of messages missed)
-
 DONE // no empty text allowed.
 
 DONE // notification of new message, browser tab blinks or highlighted, sound option.
 
 DONE //append name with _# if name already exists.
-				small bugs to fix, do this at the very end.
+				small bugs to fix.
 
 partly done // spambot
 	work on /roll and name/room change speed.
@@ -29,5 +27,6 @@ emoticons
 
 private messages
 
-
+join multiple rooms through tabs up at the top (not browser tabs)
+	html & css done, structure set up to construct next.
 
