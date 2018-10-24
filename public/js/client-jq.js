@@ -62,15 +62,34 @@ $('#timestamp-button').on('click', () => {
 });
 
 
-var str = "lobby - [2]";
-str = str.slice(-3, -2);
-console.log(str)
+$('ul.user-room-list').on('click', (event) => {
+	let val = $(event.target).text().slice(0, -1)
+	let tar = $(event.target).parent();
+	//console.log('tagname: ' + tar)
+	if (event.target.tagName === 'LI') {
+		$('.events-tables').children().hide();
+		$('.events-table-' + val).show();
+		$('.user-room-list').children().removeClass('active-user-room')
+		$(event.target).addClass('active-user-room');
+
+		const roomName = document.querySelector('#room-name');
+		roomName.innerHTML = val;
+	} else if (event.target.tagName === 'A') {
+		tar.remove();
+		//console.log('pressed x')
+	}
+
+	//console.log(val)
+});
+
 
 
 
 $('#roomlist').on('click', (event) => {
 
 // could be improved with regExp
+	const roomNameTitle = document.querySelector('#room-name');
+	let roomName = roomNameTitle.innerHTML;
 
 	let val = $(event.target).text();
 	let ele = $('#room-name')
@@ -91,15 +110,13 @@ $('#roomlist').on('click', (event) => {
 		`
 		parent.scrollTop = parent.scrollHeight;﻿
 	} else {
-		sock.emit('roomChange', join);
+		sock.emit('roomChange', {newRoom: join, currentRoom: roomName});
 	}
 });
 
 $('#name-color-button').on('click', (event) => {
 	$('.name-color-picker').css({'position': 'absolute', 'top': event.pageY, 'left': event.pageX});
 	$('.name-color-picker').show();
-	console.log('color button clicked.')
-
 });
 
 
@@ -165,7 +182,6 @@ $("body > *").not("body > button").click(function(event) {
 
 $('#controls-menu').on('click', () => {
 	$('.controls').show();
-	console.log('menu button clicked')
 });
 
 

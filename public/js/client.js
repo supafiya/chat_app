@@ -23,7 +23,8 @@ const onChatFormSubmitted = (event) => {
 	const input = document.querySelector('#chat-input');
 	const text = input.value;
 	input.value = '';
-	sock.emit('userMessage', text);
+	let room = document.querySelector('#room-name').innerHTML;
+	sock.emit('userMessage', {message: text, userroom: room});
 };
 
 // receive message information from the server
@@ -33,7 +34,7 @@ sock.on('message', (data) => {
 	let room = data.userroom;
 	let userColor = data.userColor;
 
-	const parent = document.querySelector('#events');
+	const parent = document.querySelector(`.events-table-${room}`);
 
 	if (data.username === 'Admin') {
 		parent.innerHTML += `
@@ -55,14 +56,34 @@ sock.on('message', (data) => {
 
 });
 
+
 sock.on('joinRoom', (data) => {
 	let user = data.username;
 	let message = data.message;
-	let room = data.userroom
+	let room = data.userroom;
+	let userColor = data.userColor;
+	$('.user-room-list').children().removeClass('active-user-room')
+	let parent = document.querySelector('.events-tables');
 
+	for (let i = 0; i < parent.children.length; i++) {
+		console.log(parent.children[i].tagName);
+		parent.children[i].style.display = 'none';
+	}
+
+	parent.innerHTML +=`
+	<table id="events" class="events-table-${room}">
+	</table>`;
+
+	const parentLi = document.querySelector('.user-room-list');
+
+	parentLi.innerHTML +=`
+	<li class="active-user-room">${room}<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>`
 
 
 })
+
+
+
 
 
 
@@ -75,7 +96,8 @@ sock.on('joinRoom', (data) => {
 		const input = document.querySelector('#name-input');
 		const text = input.value;
 		input.value = '';
-		sock.emit('nameChange', text);
+		const roomName = document.querySelector('#room-name').innerHTML;
+		sock.emit('nameChange', {newName: text, currentRoom: roomName});
 	};
 	// receive the information from the server
 	sock.on('nameChangeReturn', (res) => {
@@ -104,18 +126,24 @@ sock.on('joinRoom', (data) => {
 	const onRoomFormSubmitted = (event) => {
 		event.preventDefault();
 		const input = document.querySelector('#room-input');
+		const roomName = document.querySelector('#room-name').innerHTML;
 		const text = input.value;
 		input.value = '';
-		sock.emit('roomChange', text);
+		sock.emit('roomChange', {newRoom: text, currentRoom: roomName});
 	};
 	// receive the information from the server
-	sock.on('roomChangeReturn', (res) => {
+	sock.on('roomChangeReturn', (res, room) => {
 		let invalidRoomName = document.getElementById('overlay-room-invalid')
 
 		if (res === true) {
 			$('#overlay-room-form').hide();
 			$('#chat-input').focus();
 			document.getElementById('overlay-room-rules').style.display = 'none';
+
+
+
+
+
 		} else if (res === 'alreadyInRoom'){
 				invalidRoomName.classList.remove('invalidNameAnim');
 				void invalidRoomName.offsetWidth;

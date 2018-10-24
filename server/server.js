@@ -25,66 +25,74 @@ const io = socketio(server);
 
 
 let connectionCount = 0;
-let users = new Users()
+let users = new Users();
 
 io.on('connection', (sock) => {
 
-	connectionCount++
+	connectionCount++;
 	sock.conId = connectionCount;
-	sock.color = '#ccc'
+	sock.color = '#ccc';
 
+// add user to the socket room, and room in their user class
+	function joinRoom(room) {
+		sock.join(room);
+		user.room.push(room);
+	};
 
+// remove user from socket room and remove room from their user class
+	function leaveRoom(room) {
+		sock.leave(room);
+		let index = user.room.indexOf(room);
+		if (index > -1) {
+			user.room.splice(index, 1);
+		};
+	};
 
-	users.addUser(sock.id, `(user_${sock.conId})`, 'lobby');
-	sock.join('lobby')
+// this is the only exception to not use the joinRoom function. Room is already defined for user class.
+	users.addUser(sock.id, `(user_${sock.conId})`, ['lobby']);
+	sock.join('lobby');
 
+// lets us reference the user in their class
 	let user = users.getUser(sock.id);
 
-	//cross reference sockID into users to get their data.
+// reference for the user's IP address
+	let address = sock.request.connection.remoteAddress;
+
+//cross reference sockID into users to get their data.
 	let printUsers = io.sockets.adapter.rooms['lobby'].sockets;
 	let printUsers2 =  io.sockets.adapter.rooms['lobby'];
 
+// new user messages
+	function welcomeMessage() {
+		sock.emit('message', {userroom: 'lobby', message: 'Welcome, you are (user_' + sock.conId + ')', username: 'Admin'});
+		io.to('lobby').emit('message', {userroom: 'lobby' ,username: 'Admin', message: `(user_${sock.conId}) has joined.`});
+		io.to('lobby').emit('updateuserlist', users.getUserList('lobby'));
+		io.to('lobby').emit('updateroomname', users.getUser(sock.id).room);
+		console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} ip: ${address} user connected: ${users.getUser(sock.id).name}`);
+	}
+		welcomeMessage();
 
-	console.log(printUsers)
-	console.log(printUsers2.length)
-	//console.log(users.getRoomL)
-
-	let address = sock.request.connection.remoteAddress;
-
-
-	console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} ip: ${address} user connected: ${users.getUser(sock.id).name}`);
-	sock.emit('message', {message: 'Welcome, you are (user_' + sock.conId + ')', username: 'Admin'});
-
-	io.to(users.getUser(sock.id).room).emit('message', {username: 'Admin', message: `(user_${sock.conId}) has joined.`});
-	io.to(users.getUser(sock.id).room).emit('updateuserlist', users.getUserList(users.getUser(sock.id).room));
-	io.to(users.getUser(sock.id).room).emit('updateroomname', users.getUser(sock.id).room);
-
-
-
-	function roomOccupancyNumber() {
-		let roomList = users.getRoomList();
-		let kvRL = [];
-		for(let i = 0, length1 = roomList.length; i < length1; i++){
-			let rn = io.sockets.adapter.rooms[roomList[i]].length;
-
-			kvRL.push({i_room:roomList[i], i_num:rn});
-		};
-		return kvRL;
-	};
+	console.log(users.getUserList('lobby'))
 
 
 
 
-	sock.on('nameChange', (name) => {
+
+
+
+
+
+	sock.on('nameChange', (data) => {
 		let user = users.getUser(sock.id);
-		let userOldRoom = user.room;
+		let userOldRoom = data.currentRoom;
 		let oldName = user.name;
+		let name = data.newName;
 
 		if (validation.identities(name) === false) {
 			sock.emit('nameChangeReturn', false);
 
 		} else if (name === oldName) {
-			sock.emit('message', {username: 'Admin', message: 'Your name is already ' + user.name + '!'})
+			sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: 'Your name is already ' + user.name + '!'})
 			sock.emit('nameChangeReturn', false);
 
 		} else {
@@ -133,8 +141,8 @@ fix name duplicate support!
 
 			} else {
 				user.name = nameLC;
-				io.to(userOldRoom).emit('updateuserlist', users.getUserList(user.room));
-				io.to(userOldRoom).emit('message', {message: oldName + ' has changed their name to ' + user.name + '.', username: 'Admin'});
+				io.to(userOldRoom).emit('updateuserlist', users.getUserList(userOldRoom));
+				io.to(userOldRoom).emit('message', {userroom: userOldRoom, message: oldName + ' has changed their name to ' + user.name + '.', username: 'Admin'});
 				sock.emit('nameChangeReturn', true);
 				console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${oldName} changed name to ${user.name}`);
 
@@ -149,43 +157,42 @@ fix name duplicate support!
 	});
 
 
-	sock.on('roomChange', (room) => {
+	sock.on('roomChange', (data) => {
+		let room = data.newRoom;
+		let userOldRoom = data.currentRoom;
 		if (validation.identities(room) === false) {
 			sock.emit('roomChangeReturn', false);
 		} else {
 			let user = users.getUser(sock.id);
-			let userOldRoom = user.room;
 			let oldName = user.name;
 
 			if (userOldRoom === room) {
-				sock.emit('message', {username: 'Admin', message: ' You are already in that room!'});
+				sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: ' You are already in that room!'});
 				sock.emit('roomChangeReturn', 'alreadyInRoom');
 			} else {
-
-					io.to(room).emit('message', {message: user.name + ' has joined the room.', username: 'Admin'});
-					user.room = room;
+					sock.emit('joinRoom', {userroom: room})
+					io.to(room).emit('message', {userroom: room, message: user.name + ' has joined the room.', username: 'Admin'});
+					user.room.push(room)
 					sock.emit('updateroomname', room);
-					sock.leave(userOldRoom);
 					sock.join(room);
-					console.log(sock.room)
+					sock.emit('updateuserlist', users.getUserList(room))
 
-					io.to(userOldRoom).emit('message', {username: 'Admin', message: user.name + ' has left the room.'});
-					io.to(user.room).emit('updateuserlist', users.getUserList(user.room));
-					io.to(userOldRoom).emit('updateuserlist', users.getUserList(userOldRoom));
+					io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: 'Admin', message: user.name + ' has left the room.'});
 
-					io.emit('updateroomlist', roomOccupancyNumber());
+					io.emit('updateroomlist', users.getRoomOccupantNumber());
 
-					sock.emit('message', {username: 'Admin', message: 'You are now in room ' + user.room + '.'})
-					sock.emit('roomChangeReturn', true);
+					sock.emit('message', {userroom: room, username: 'Admin', message: 'You are now in room ' + room + '.'})
+					sock.emit('roomChangeReturn', true, room);
+
 			}
 		}
 	});
 
-	sock.on('userMessage', (text) => {
+	sock.on('userMessage', (data) => {
 		let user = users.getUser(sock.id);
-		let userOldRoom = user.room;
+		let userOldRoom = data.userroom
 		let oldName = user.name
-
+		let text = data.message
 
 		if (validation.messageInput(text) === true) {
 
@@ -194,25 +201,25 @@ fix name duplicate support!
 					let len = text.length;
 					let joinVar = text.slice(6, len).trim();
 					if (validation.identities(joinVar) === true) {
-						if (user.room === joinVar) {
-							sock.emit('message', {username: 'Admin', message: 'You are already in that room!'});
+						if (userOldRoom === joinVar) {
+							sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: 'You are already in that room!'});
 						} else {
-							user.room = joinVar;
+							user.room += joinVar;
 							sock.emit('updateroomname', joinVar);
 							sock.leave(userOldRoom);
 							sock.join(joinVar);
-							io.to(userOldRoom).emit('message', {username: 'Admin', message: user.name + ' has left the room.'});
+							io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: 'Admin', message: user.name + ' has left the room.'});
 
-							sock.emit('message', {username: user.name, message: 'You are now in room', userroom: user.room})
+							sock.emit('message', {username: 'Admin', message: 'You are now in room ', userroom: joinVar})
 
-							sock.broadcast.to(user.room).emit('message', {username: 'Admin', message: user.name + ' has joined the room.'});
-							io.to(user.room).emit('updateuserlist', users.getUserList(user.room));
-							io.to(userOldRoom).emit('updateuserlist', users.getUserList(userOldRoom));
-							io.emit('updateroomlist', roomOccupancyNumber());
+							sock.broadcast.to(user.room).emit('message', {userroom: joinVar, username: 'Admin', message: user.name + ' has joined the room.'});
+
+
+							io.emit('updateroomlist', users.getRoomOccupantNumber());
 						};
 
 					} else {
-						sock.emit('message', {message: 'Invalid room name', username: 'Admin'});
+						sock.emit('message', {userroom: userOldRoom, message: 'Invalid room name', username: 'Admin'});
 						return false;
 					}
 
@@ -223,12 +230,11 @@ fix name duplicate support!
 						user.name = joinVar;
 
 
-						io.to(userOldRoom).emit('message', {username: 'Admin', message: oldName + ' has changed their name to ' + user.name + '.'});
+						io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: 'Admin', message: oldName + ' has changed their name to ' + user.name + '.'});
 
-						io.to(userOldRoom).emit('updateuserlist', users.getUserList(user.room));
 						console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${oldName} changed name to ${user.name}`);
 					} else {
-						sock.emit('message', {username: 'Admin', message: 'Invalid name'});
+						sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: 'Invalid name'});
 						return false;
 					};
 
@@ -236,7 +242,7 @@ fix name duplicate support!
 
 				} else if (text.slice(0, 5) === '/roll') {
 					let randomNumber = Math.floor(Math.random() * 101)
-					io.to(userOldRoom).emit('message', {username: 'Admin', message: user.name + ' has rolled ' + randomNumber + '.'});
+					io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: 'Admin', message: user.name + ' has rolled ' + randomNumber + '.'});
 					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${userOldRoom}: ${user.name} rolled ${randomNumber} `);
 
 				} else if (text.slice(0, 6) === '/color') {
@@ -248,32 +254,31 @@ fix name duplicate support!
 				}	else {
 					let fix1 = text.replace(/</g, "&lt;");
 					let fix2 = fix1.replace(/>/g, "&gt;");
-					io.to(user.room).emit('updateroomname', user.room)
-					io.to(user.room).emit('message', {username: user.name, message: fix2, userColor: sock.color})
-					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} chat message: ${users.getUser(sock.id).room}: ${users.getUser(sock.id).name}: ${text}`);
+					io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: user.name, message: fix2, userColor: sock.color})
+					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} chat message: ${userOldRoom}: ${users.getUser(sock.id).name}: ${text}`);
 				};
 			// send response returned response from validation module
 			} else {
-				sock.emit('message', {username: 'Admin', message: validation.messageInput(text)});
+				sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: validation.messageInput(text)});
 			};
+
 
 	});
 
-	io.emit('updateroomlist', roomOccupancyNumber())
+	io.emit('updateroomlist', users.getRoomOccupantNumber())
 
 	sock.on('disconnect', () => {
 		let user = users.getUser(sock.id);
 		let userOldRoom = user.room;
 		let oldName = user.name
-		io.to(user.room).emit('message', {username: 'Admin', message: user.name + ' has disconnected.'});
+		io.to(user.room).emit('message', {userroom: userOldRoom, username: 'Admin', message: user.name + ' has disconnected.'});
 
 		console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} user disconnected: ${users.getUser(sock.id).name}`);
 
 		let currentroom = users.getUser(sock.id).room
 		users.removeUser(sock.id);
-		io.to(currentroom).emit('updateuserlist', users.getUserList(currentroom))
 
-		io.emit('updateroomlist', roomOccupancyNumber());
+		io.emit('updateroomlist', users.getRoomOccupantNumber());
 
 	});
 

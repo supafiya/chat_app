@@ -29,10 +29,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f77f7f;
+  background: #fbdbdb;
 }
 
-
+button:focus, input:focus {
+  outline: 2px solid #fbdbdb;
+}
 
 
 
@@ -77,16 +79,17 @@ body {
     border: 1px solid #ffa8a8;
     background-color: #21070fe8;
     min-width: 190px;
-    max-width: 300px;
+    max-width: 240px;
     overflow-y: scroll;
-    margin: 5px 5px;
+    margin: 5px 0px;
   }
 
   .chat-box {
-    margin: 5px 10px;
+    margin: 5px 5px;
     background-color: #21070fe8;
     display: block;
     border: 1px solid #ffa8a8;
+    position: relative;
   }
 
 .controls {
@@ -106,9 +109,9 @@ body {
   }
 
 .userlist-box {
-    margin: 5px 5px;
+    margin: 5px 0px;
     min-width: 190px;
-    max-width: 300px;
+    max-width: 240px;
     overflow-y: scroll;
     border: 1px solid #ffa8a8;
     background-color: #21070fe8;
@@ -129,8 +132,11 @@ body {
     }
 
     #roomlist li {
+      position: relative;
       cursor: pointer;
       border-bottom: 1px solid #ffa8a8;
+      width: 220px;
+      left: -35px;
     }
 
   .user-room-list {
@@ -152,7 +158,9 @@ body {
     list-style: none;
     background-color: #250b15;
     border: 1px solid #ffa8a8;
-    border-radius: 2px;
+    border-radius: 10px; /* default 2 */
+    font-size: 1em;
+    font-weight: bold;
     cursor: pointer;
     transition: 0.25s
   }
@@ -187,20 +195,18 @@ body {
   }
 
 
-   #active-user-room {
-     font-weight: bold;
-     background-color: #fbdbdb;
-     color: #250b15;
-     cursor: default;
+   .active-user-room {
+     background-color: #fbdbdb !important;
+     color: #250b15 !important;
+     cursor: default !important;
   }
 
-    table  {
+    table {
       border-top: 1px solid #ffa8a8;
       display: block;
       height: 400px;
       overflow-y: scroll;
       border-collapse: collapse;
-      width: 910px;
   }
 
 tr {
@@ -260,6 +266,8 @@ td:nth-child(2) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
+    padding: 5px;
+    border: 1px solid #ffa8a8;
   }
 
     #ncp1 {
