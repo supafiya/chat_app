@@ -66,7 +66,6 @@ sock.on('joinRoom', (data) => {
 	let parent = document.querySelector('.events-tables');
 
 	for (let i = 0; i < parent.children.length; i++) {
-		console.log(parent.children[i].tagName);
 		parent.children[i].style.display = 'none';
 	}
 
@@ -178,20 +177,12 @@ sock.on('updateroomlist', function (data) {
 	const parent = document.querySelector('#roomlist');
 	parent.innerHTML = '';
 	let roomList = data;
-	console.log(data)
 	for(let i = 0, length1 = roomList.length; i < length1; i++){
 		let currentObj = roomList[i]
 		let listName = currentObj.i_room;
 		let listNum = currentObj.i_num;
 		parent.innerHTML += `<li>${listName} - [<span style="color:#ffa8a8">${listNum}</span>]</li>`;
 	}
-
-
-
-
-	//rooms.forEach(function (room) {
-		//parent.innerHTML += `<li>${room}<span id="_null">  [0]</span></li>`;
-	//});
 });
 
 

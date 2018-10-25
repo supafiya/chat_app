@@ -40,13 +40,13 @@ io.on('connection', (sock) => {
 	};
 
 // remove user from socket room and remove room from their user class
-	function leaveRoom(room) {
-		sock.leave(room);
-		let index = user.room.indexOf(room);
-		if (index > -1) {
-			user.room.splice(index, 1);
-		};
-	};
+//	function leaveRoom(room) {
+//		sock.leave(room);
+//		let index = user.room.indexOf(room);
+//		if (index > -1) {
+//			user.room.splice(index, 1);
+//		};
+//	};
 
 // this is the only exception to not use the joinRoom function. Room is already defined for user class.
 	users.addUser(sock.id, `(user_${sock.conId})`, ['lobby']);
@@ -75,10 +75,50 @@ io.on('connection', (sock) => {
 	console.log(users.getUserList('lobby'))
 
 
+	sock.on('AlreadyInRoom', (data) => {
+		room = data.userroom
+		io.to(room).emit('message', {userroom: room, message: 'You are already in that room!', username: 'Admin'});
+	});
 
+	sock.on('changeUserColor', (data) => {
+		color = data.colorCode
+		sock.color = color
+	})
 
+	sock.on('getRoomsUsers', (data) => {
+		let room = data.userroom;
 
+		sock.emit('updateuserlist', users.getUserList(room));
+	})
 
+	sock.on('getRoomList', () => {
+		io.emit('updateroomlist', users.getRoomOccupantNumber());
+	});
+
+	sock.on('getSoftRoomList', function(data, callback) {
+		console.log('get soft room list data: ' + data);
+		let room = data;
+		let userName = user.name
+		let userList = users.getUserList(room);
+
+		if (userList.includes(userName)) {
+			callback('user name in list ', true);
+		} else {
+			callback('user name not in list ', false);
+		}
+
+	});
+
+	sock.on('leaveRoom', (data) => {
+		let room = data.userroom;
+		console.log(user.name + ' tried to leave "' + room + ' "')
+		sock.leave(room);
+		let index = user.room.indexOf(room);
+		if (index > -1) {
+			user.room.splice(index, 1);
+		};
+		io.to(room).emit('message', {userroom: room, message: user.name + ' has left the room.', username: 'Admin'});
+	});
 
 
 
@@ -177,7 +217,6 @@ fix name duplicate support!
 					sock.join(room);
 					sock.emit('updateuserlist', users.getUserList(room))
 
-					io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: 'Admin', message: user.name + ' has left the room.'});
 
 					io.emit('updateroomlist', users.getRoomOccupantNumber());
 

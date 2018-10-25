@@ -65,21 +65,32 @@ $('#timestamp-button').on('click', () => {
 $('ul.user-room-list').on('click', (event) => {
 	let val = $(event.target).text().slice(0, -1)
 	let tar = $(event.target).parent();
-	//console.log('tagname: ' + tar)
+	let tartext = tar.text().slice(0, -1)
+	const roomName = document.querySelector('#room-name');
+
 	if (event.target.tagName === 'LI') {
 		$('.events-tables').children().hide();
 		$('.events-table-' + val).show();
 		$('.user-room-list').children().removeClass('active-user-room')
 		$(event.target).addClass('active-user-room');
-
-		const roomName = document.querySelector('#room-name');
+		sock.emit('getRoomsUsers', {userroom: val})
 		roomName.innerHTML = val;
-	} else if (event.target.tagName === 'A') {
-		tar.remove();
-		//console.log('pressed x')
-	}
 
-	//console.log(val)
+	} else if (event.target.tagName === 'A') {
+		sock.emit('leaveRoom', {userroom: tartext});
+		sock.emit('getRoomList');
+		tar.remove();
+		$('.events-table-' + tartext).remove();
+
+		if (tar.hasClass('active-user-room') === true) {
+			let roomListFirst = $('.user-room-list li').first();
+			let roomFirst = roomListFirst.text().slice(0, -1);
+			$('.events-tables').children().hide();
+			$('.events-table-' + roomFirst).show();
+			roomListFirst.addClass('active-user-room');
+			roomName.innerHTML = roomFirst;
+		}
+	}
 });
 
 
@@ -102,17 +113,21 @@ $('#roomlist').on('click', (event) => {
 
 	if (join === text) {
 		const parent = document.querySelector('#events');
-		parent.innerHTML += `
-		<tr>
-    	<td class="time">${timestamp()}</td>
-    	<td style="font-style:italic;"><span style="color:#ff5c5c; font-weight:bold; font-style:italic;">Admin:</span> You are already in that room!</td>
-  	</tr>
-		`
+		sock.emit('AlreadyInRoom', {userroom: roomName});
 		parent.scrollTop = parent.scrollHeight;﻿
+
 	} else {
-		sock.emit('roomChange', {newRoom: join, currentRoom: roomName});
-	}
+			sock.emit('getSoftRoomList', join, function(req, res) {
+				if (res === true) {
+					sock.emit('AlreadyInRoom', {userroom: roomName});
+				} else if (res === false) {
+						sock.emit('roomChange', {newRoom: join, currentRoom: roomName});
+					}
+			});
+	};
 });
+
+
 
 $('#name-color-button').on('click', (event) => {
 	$('.name-color-picker').css({'position': 'absolute', 'top': event.pageY, 'left': event.pageX});
@@ -122,52 +137,51 @@ $('#name-color-button').on('click', (event) => {
 
 // colors:
 	$('#ncp1').on('click', () => {
-		sock.emit('userMessage', `/color #FE2712`)
+		sock.emit('changeUserColor', {colorCode: '#FE2712'})
 	})
 
 	$('#ncp2').on('click', () => {
-		sock.emit('userMessage', `/color #FC600A`)
+		sock.emit('changeUserColor', {colorCode: '#FC600A'})
 	})
 
 	$('#ncp3').on('click', () => {
-		sock.emit('userMessage', `/color #FB9902`)
+		sock.emit('changeUserColor', {colorCode: '#FB9902'})
 	})
 
 	$('#ncp4').on('click', () => {
-		sock.emit('userMessage', `/color #FCCC1A`)
+		sock.emit('changeUserColor', {colorCode: '#FCCC1A'})
 	})
 
 	$('#ncp5').on('click', () => {
-		sock.emit('userMessage', `/color #FEFE33`)
+		sock.emit('changeUserColor', {colorCode: '#FEFE33'})
 	})
 
 	$('#ncp6').on('click', () => {
-		sock.emit('userMessage', `/color #B2D732`)
+		sock.emit('changeUserColor', {colorCode: '#B2D732'})
 	})
 
 	$('#ncp7').on('click', () => {
-		sock.emit('userMessage', `/color #66B032`)
+		sock.emit('changeUserColor', {colorCode: '#66B032'})
 	})
 
 	$('#ncp8').on('click', () => {
-		sock.emit('userMessage', `/color #347C98`)
+		sock.emit('changeUserColor', {colorCode: '#347C98'})
 	})
 
   $('#ncp9').on('click', () => {
-		sock.emit('userMessage', `/color #0247FE`)
+		sock.emit('changeUserColor', {colorCode: '#0247FE'})
 	})
 
   $('#ncp10').on('click', () => {
-		sock.emit('userMessage', `/color #4424D6`)
+		sock.emit('changeUserColor', {colorCode: '#4424D6'})
 	})
 
   $('#ncp11').on('click', () => {
-		sock.emit('userMessage', `/color #8601AF`)
-
+		sock.emit('changeUserColor', {colorCode: '#8601AF'})
 	})
 
   $('#ncp12').on('click', () => {
-		sock.emit('userMessage', `/color #C21460`)
+		sock.emit('changeUserColor', {colorCode: '#C21460'})
 	})
 
 

@@ -11,6 +11,9 @@ DONE // no empty text allowed.
 
 DONE // notification of new message, browser tab blinks or highlighted, sound option.
 
+DONE // join multiple rooms through tabs up at the top (not browser tabs)
+					send usetlist update to every room a user is in that changed their name.
+
 DONE //append name with _# if name already exists.
 				small bugs to fix.
 				person can name themselves (user_#) to duplicate names, possibly reserve any name (user_#)
@@ -28,6 +31,5 @@ emoticons
 
 private messages
 
-join multiple rooms through tabs up at the top (not browser tabs)
-	html & css done, structure set up to construct next.
+
 
