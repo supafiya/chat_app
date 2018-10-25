@@ -102,11 +102,10 @@ io.on('connection', (sock) => {
 		let userList = users.getUserList(room);
 
 		if (userList.includes(userName)) {
-			callback('user name in list ', true);
+			callback('callback true', true);
 		} else {
-			callback('user name not in list ', false);
+			callback('callback false', false);
 		}
-
 	});
 
 	sock.on('leaveRoom', (data) => {
@@ -119,8 +118,6 @@ io.on('connection', (sock) => {
 		};
 		io.to(room).emit('message', {userroom: room, message: user.name + ' has left the room.', username: 'Admin'});
 	});
-
-
 
 	sock.on('nameChange', (data) => {
 		let user = users.getUser(sock.id);
