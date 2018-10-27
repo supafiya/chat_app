@@ -13,6 +13,9 @@ DONE // notification of new message, browser tab blinks or highlighted, sound op
 
 DONE // join multiple rooms through tabs up at the top (not browser tabs)
 					send usetlist update to every room a user is in that changed their name.
+					when you close a room, userlist needs to be updated.
+					when user joins a room, update that rooms userlist.
+					room list (not browser) should flash when new msg
 
 DONE //append name with _# if name already exists.
 				small bugs to fix.
@@ -21,7 +24,7 @@ DONE //append name with _# if name already exists.
 partly done // spambot
 	work on /roll and name/room change speed.
 
-room leaders + commands /kick /ban (0 being forever) /mute /unmute + dropdown menu for these commands
+room leaders + commands /kick /ban (0 being forever) /mute /unmute /-create polls-/ + dropdown menu for these commands
 
 add a /help command
 
@@ -31,5 +34,6 @@ emoticons
 
 private messages
 
+polls
 
 

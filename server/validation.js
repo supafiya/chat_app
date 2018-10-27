@@ -1,16 +1,22 @@
 const validation = {
 	identities : function (str) {
-		let newStr = str.trim();
-		let newStr2 = newStr.toLowerCase();
-		if (newStr.length === 0 || newStr.length < 4 || newStr.length > 16 ) {
-			return false;
-		} else if (newStr2.includes("/")) {
-			return false;
-		} else if (newStr2.includes("admin")) {
-			return false;
-		} else {
-			return true;
+		let strArr = str.split('');
+		let newStr = str.trim().replace(/_SPACE_/gi, " ");
+		let newStr2 = newStr.toLowerCase()
+		function isChar(element, index, array) {
+  		return element.match(/[\w ]/);
 		}
+		if (strArr.every(isChar)) {
+			if (newStr.length === 0 || newStr.length < 4 || newStr.length > 16 ) {
+				return false;
+			} else if (newStr2.includes("admin")) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		};
 	},
 	messageInput : function (msg) {
 		let newMsg = msg.trim();

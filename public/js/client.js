@@ -24,7 +24,8 @@ const onChatFormSubmitted = (event) => {
 	const text = input.value;
 	input.value = '';
 	let room = document.querySelector('#room-name').innerHTML;
-	sock.emit('userMessage', {message: text, userroom: room});
+	let roomfix = room.replace(/ /gi, "_SPACE_");
+	sock.emit('userMessage', {message: text, userroom: roomfix});
 };
 
 // receive message information from the server
@@ -74,6 +75,7 @@ sock.on('joinRoom', (data) => {
 	</table>`;
 
 	const parentLi = document.querySelector('.user-room-list');
+	room = room.replace(/_SPACE_/gi, " ");
 
 	parentLi.innerHTML +=`
 	<li class="active-user-room">${room}<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>`
@@ -168,7 +170,14 @@ sock.on('updateuserlist', function (users) {
 
 sock.on('updateroomname', function (room) {
 	const roomName = document.querySelector('#room-name');
-	roomName.innerHTML = room;
+	let roomfix = room;
+	if(roomfix.length > 1) {
+		let fixroomname = roomfix.replace(/_SPACE_/gi, " ");
+		roomName.innerHTML = fixroomname;
+	} else {
+		roomName.innerHTML = roomfix;
+	}
+
 });
 
 
@@ -177,9 +186,10 @@ sock.on('updateroomlist', function (data) {
 	const parent = document.querySelector('#roomlist');
 	parent.innerHTML = '';
 	let roomList = data;
+
 	for(let i = 0, length1 = roomList.length; i < length1; i++){
 		let currentObj = roomList[i]
-		let listName = currentObj.i_room;
+		let listName = currentObj.i_room.replace(/_SPACE_/gi, " ");
 		let listNum = currentObj.i_num;
 		parent.innerHTML += `<li>${listName} - [<span style="color:#ffa8a8">${listNum}</span>]</li>`;
 	}
@@ -196,5 +206,6 @@ document.querySelector('#name-form').addEventListener('submit', onNameFormSubmit
 document.querySelector('#room-form').addEventListener('submit', onRoomFormSubmitted);
 
 document.querySelector('#roll-dice-btn').addEventListener('click', () => {
-	sock.emit('userMessage', '/roll');
+	const roomName = document.querySelector('#room-name');
+	sock.emit('userRoll', {userroom: roomName.innerHTML});
 })

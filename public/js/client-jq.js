@@ -64,31 +64,59 @@ $('#timestamp-button').on('click', () => {
 
 $('ul.user-room-list').on('click', (event) => {
 	let val = $(event.target).text().slice(0, -1)
+	const valPersist = val;
 	let tar = $(event.target).parent();
 	let tartext = tar.text().slice(0, -1)
 	const roomName = document.querySelector('#room-name');
 
 	if (event.target.tagName === 'LI') {
 		$('.events-tables').children().hide();
-		$('.events-table-' + val).show();
+		$('.events-table-' + val.replace(/ /gi, "_SPACE_")).show();
 		$('.user-room-list').children().removeClass('active-user-room')
 		$(event.target).addClass('active-user-room');
-		sock.emit('getRoomsUsers', {userroom: val})
+		sock.emit('getRoomsUsers', {userroom: val.replace(/ /gi, "_SPACE_")})
 		roomName.innerHTML = val;
 
 	} else if (event.target.tagName === 'A') {
-		sock.emit('leaveRoom', {userroom: tartext});
-		sock.emit('getRoomList');
-		tar.remove();
-		$('.events-table-' + tartext).remove();
+		let roomListFirst = $('.user-room-list li').first();
+		let roomFirst = roomListFirst.text().slice(0, -1).replace(/ /gi, "_SPACE_");
+		let roomListLast = $('.user-room-list li').last();
+		let roomLast = roomListLast.text().slice(0, -1).replace(/ /gi, "_SPACE_");
+		let parentRoom = tar.text().slice(0, -1).replace(/ /gi, "_SPACE_");
 
-		if (tar.hasClass('active-user-room') === true) {
-			let roomListFirst = $('.user-room-list li').first();
-			let roomFirst = roomListFirst.text().slice(0, -1);
-			$('.events-tables').children().hide();
-			$('.events-table-' + roomFirst).show();
-			roomListFirst.addClass('active-user-room');
-			roomName.innerHTML = roomFirst;
+		if (roomFirst != roomLast) {
+			/*
+			console.log('roomFirst = ' + roomFirst)
+			console.log('val = ' + valPersist)
+			*/
+			sock.emit('leaveRoom', {userroom: tartext.replace(/ /gi, "_SPACE_")});
+			sock.emit('getRoomList');
+			tar.remove();
+			$('.events-table-' + tartext.replace(/ /gi, "_SPACE_")).remove();
+
+			if (tar.hasClass('active-user-room') === true) {
+				$('.events-tables').children().hide();
+				/*
+				console.log('first room: ' + roomFirst);
+				console.log('last room: ' + roomLast);
+				console.log('target room: ' + tartext);
+				*/
+
+				if (parentRoom === roomFirst) {
+					$('.events-table-' + roomLast).show();
+					roomListLast.addClass('active-user-room');
+					roomName.innerHTML = roomLast.replace(/_SPACE_/gi, " ");
+					sock.emit('updateuserslist', {userroom: roomLast});
+				} else {
+					$('.events-table-' + roomFirst).show();
+					roomListFirst.addClass('active-user-room');
+					roomName.innerHTML = roomFirst.replace(/_SPACE_/gi, " ");
+					sock.emit('updateuserslist', {userroom: roomFirst});
+				}
+			}
+		} else {
+			console.log('Cannot leave only open room.') // this prevents from closing a room if only one is open.
+
 		}
 	}
 });
@@ -98,9 +126,9 @@ $('ul.user-room-list').on('click', (event) => {
 
 $('#roomlist').on('click', (event) => {
 
-// could be improved with regExp
+
 	const roomNameTitle = document.querySelector('#room-name');
-	let roomName = roomNameTitle.innerHTML;
+	let roomName = roomNameTitle.innerHTML
 
 	let val = $(event.target).text();
 	let ele = $('#room-name')
@@ -113,15 +141,15 @@ $('#roomlist').on('click', (event) => {
 
 	if (join === text) {
 		const parent = document.querySelector('#events');
-		sock.emit('AlreadyInRoom', {userroom: roomName});
+		sock.emit('AlreadyInRoom', {userroom: roomName.replace(/ /gi, "_SPACE_")});
 		parent.scrollTop = parent.scrollHeight;﻿
 
 	} else {
-			sock.emit('getSoftRoomList', join, function(req, res) {
+			sock.emit('getSoftRoomList', join.replace(/ /gi, "_SPACE_"), function(req, res) {
 				if (res === true) {
-					sock.emit('AlreadyInRoom', {userroom: roomName});
+					sock.emit('AlreadyInRoom', {userroom: roomName.replace(/ /gi, "_SPACE_")});
 				} else if (res === false) {
-						sock.emit('roomChange', {newRoom: join, currentRoom: roomName});
+						sock.emit('roomChange', {newRoom: join.replace(/ /gi, "_SPACE_"), currentRoom: roomName.replace(/ /gi, "_SPACE_")});
 					}
 			});
 	};
@@ -226,7 +254,7 @@ setInterval(function () {
 		if (document.hasFocus()) {
 			unreadMessages();
 		}
-}, 1000);
+}, 500);
 
 sock.on('message', () => {
 	unreadMessages();
