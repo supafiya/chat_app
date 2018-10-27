@@ -156,17 +156,23 @@ sock.on('joinRoom', (data) => {
 	});
 
 
+sock.on('updateuserlist', function (data) {
+	const parent = document.querySelector('#userlist');
+	const roomName = document.querySelector('#room-name');
+	let userOldRoom = roomName.innerHTML;
+	let users = data.userlist;
+	let userroom = data.userroom;
 
+	if (userOldRoom.replace(/ /g, '_SPACE_') === userroom) {
+		parent.innerHTML = '';
+		users.forEach(function (user) {
+			parent.innerHTML += `<li>${user}</li>`
+		});
 
-sock.on('updateuserlist', function (users) {
-	const parent = document.querySelector('#userlist')
-	parent.innerHTML = '';
+	};
 
-	users.forEach(function (user) {
-		parent.innerHTML += `<li>${user}</li>`
-
-	});
 });
+
 
 sock.on('updateroomname', function (room) {
 	const roomName = document.querySelector('#room-name');
@@ -186,7 +192,6 @@ sock.on('updateroomlist', function (data) {
 	const parent = document.querySelector('#roomlist');
 	parent.innerHTML = '';
 	let roomList = data;
-
 	for(let i = 0, length1 = roomList.length; i < length1; i++){
 		let currentObj = roomList[i]
 		let listName = currentObj.i_room.replace(/_SPACE_/gi, " ");

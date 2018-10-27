@@ -1,6 +1,5 @@
 TODO:
 
-
 DONE // timestamps on or off option
 
 DONE // remove lines of text when they get above 150.
@@ -12,9 +11,9 @@ DONE // no empty text allowed.
 DONE // notification of new message, browser tab blinks or highlighted, sound option.
 
 DONE // join multiple rooms through tabs up at the top (not browser tabs)
-					send usetlist update to every room a user is in that changed their name.
-					when you close a room, userlist needs to be updated.
-					when user joins a room, update that rooms userlist.
+				DONE // send usetlist update to every room a user is in that changed their name.
+				DONE // when you close a room, userlist needs to be updated.
+				DONE // when user joins a room, update that rooms userlist.
 					room list (not browser) should flash when new msg
 
 DONE //append name with _# if name already exists.
