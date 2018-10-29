@@ -212,7 +212,6 @@ button:focus, input:focus {
 tr {
   display: grid;
   grid-template-columns: auto auto;
-  /* justify-items: stretch; probably don't need */
   float: left;
 }
 
@@ -318,6 +317,329 @@ td:nth-child(2) {
       background-color: #C21460;
     }
 
+    .color-picker {
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      position: relative;
+      border: 1px solid white;
+      top: 25px;
+      color: white;
+      width: 800px;
+      height: 550px;
+      margin: 0 auto;
+      border-radius: 25px;
+    }
+
+    #color-picker-name-outer {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-gap: 2px;
+      margin: 20px;
+      width: 250px;
+      padding: 35px;
+    }
+
+    #color-picker-name-outer p {
+
+      font-size: 1.5em;
+      position: relative;
+      grid-column-start: 1;
+      grid-column-end: 5;
+      display: block;
+      margin: auto;
+    }
+
+    #color-picker-name-controls {
+      position: absolute;
+      display: flex;
+      height: 75px;
+      justify-content: space-around;
+      width: 800px;
+      top: 460px;
+    }
+
+    #color-picker-name-ok-btn {
+      display: block;
+      height: 50px;
+      margin-top: 40px;
+      color: #ffffff;
+      width: 150px;
+      text-transform: uppercase;
+      font-size: .8em;
+      border: 1px solid #656565;
+      background-image: linear-gradient(#a09e9e, #4c4c4c);
+      border-radius: 2px;
+    }
+
+    #cpno {
+      color: white;
+      background-color: black;
+      display: block;
+      border: 1px solid white;
+      border-radius: 15px;
+      width: 50px;
+      margin-left: -45px;
+      padding: 28px;
+      transition: 0.5s;
+    }
+
+    #cpno:hover {
+      color: black;
+      background-color: #666;
+      transition: 0.5s;
+    }
+
+    #cpni {
+      color: black;
+      background-color: white;
+      display: block;
+      border: 1px solid black;
+      border-radius: 15px;
+      width: 50px;
+      margin-right: -45px;
+      padding: 28px;
+      transition: 0.5s;
+    }
+    #cpni:hover {
+      color: white;
+      background-color: #888;
+      transition: 0.5s;
+    }
+
+
+
+
+
+    #color-picker-box-controls {
+      display: flex;
+      position: absolute;
+      font-size: 2em;
+      width: 800px;
+      justify-content: space-around;
+    }
+
+    #overlay-color-form-close {
+      color: #F44336;
+      text-decoration: none;
+      font-size: 2em;
+      transition: 0.5s;
+    }
+
+    #overlay-color-form-close:hover {
+      color: #ffafa9;
+    }
+
+    #overlay-color-form-accept {
+      color: #25cc2c;
+      text-decoration: none;
+      font-size: 1.5em;
+      margin-right: 600px;
+      transition: 0.5s;
+    }
+
+    #overlay-color-form-accept:hover {
+      color: #93ff98;
+    }
+
+     #name-color-preview {
+      display: block;
+      position: absolute;
+      font-size: 2em;
+      color: #ffffff;
+      background-color: #ff00;
+      left: 345px;
+    }
+
+
+    #color-picker-name-ok-btn:hover {
+      background-image: linear-gradient(#a09e9e, #313131);
+      color: #cccccc;
+    }
+
+
+
+
+
+
+
+
+
+
+    #cpno1 {
+      background-color: #112135;
+    }
+    #cpno2 {
+      background-color: #152b49;
+    }
+    #cpno3 {
+      background-color: #1c1b39;
+    }
+    #cpno4 {
+      background-color: #222248;
+    }
+    #cpno5 {
+      background-color: #231931;
+    }
+    #cpno6 {
+      background-color: #2c213d;
+    }
+    #cpno7 {
+      background-color: #2f1630;
+    }
+    #cpno8 {
+      background-color: #431d41;
+    }
+    #cpno9 {
+      background-color: #551b29;
+    }
+    #cpno10 {
+      background-color: #651f2c;
+    }
+    #cpno11 {
+      background-color: #572b23;
+    }
+    #cpno12 {
+      background-color: #6d392b;
+    }
+    #cpno13 {
+      background-color: #593925;
+    }
+    #cpno14 {
+      background-color: #6c462a;
+    }
+    #cpno15 {
+      background-color: #5d4625;
+    }
+    #cpno16 {
+      background-color: #73582d;
+    }
+    #cpno17 {
+      background-color: #5d5527;
+    }
+    #cpno18 {
+      background-color: #72692e;
+    }
+    #cpno19 {
+      background-color: #3a3c18;
+    }
+    #cpno20 {
+      background-color: #4c5420;
+    }
+    #cpno21 {
+      background-color: #123414;
+    }
+    #cpno22 {
+      background-color: #16481d;
+    }
+    #cpno23 {
+      background-color: #0c2220;
+    }
+    #cpno24 {
+      background-color: #123431;
+    }
+
+
+
+
+    #color-picker-name-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-gap: 2px;
+      margin: 20px;
+      width: 250px;
+      margin-left: auto;
+      padding: 35px;
+    }
+
+    #color-picker-name-inner p {
+
+      font-size: 1.5em;
+      position: relative;
+      grid-column-start: 1;
+      grid-column-end: 5;
+      display: block;
+      margin: auto;
+    }
+
+
+    #cpni1 {
+      background-color: #5e90b6;
+    }
+    #cpni2 {
+      background-color: #83a1c7;
+    }
+    #cpni3 {
+      background-color: #6c7fae;
+    }
+    #cpni4 {
+      background-color: #8896ba;
+    }
+    #cpni5 {
+      background-color: #8c76aa;
+    }
+    #cpni6 {
+      background-color: #9a8bb9;
+    }
+    #cpni7 {
+      background-color: #ac74a9;
+    }
+    #cpni8 {
+      background-color: #b991b5;
+    }
+    #cpni9 {
+      background-color: #d26262;
+    }
+    #cpni10 {
+      background-color: #e18a73;
+    }
+    #cpni11 {
+      background-color: #d58b59;
+    }
+    #cpni12 {
+      background-color: #e4a770;
+    }
+    #cpni13 {
+      background-color: #df9a57;
+    }
+    #cpni14 {
+      background-color: #e3b771;
+    }
+    #cpni15 {
+      background-color: #e5af59;
+    }
+    #cpni16 {
+      background-color: #e6c774;
+    }
+    #cpni17 {
+      background-color: #e7cb5b;
+    }
+    #cpni18 {
+      background-color: #e4d376;
+    }
+    #cpni19 {
+      background-color: #a4b571;
+    }
+    #cpni20 {
+      background-color: #c0d088;
+    }
+    #cpni21 {
+      background-color: #6eb16d;
+    }
+    #cpni22 {
+      background-color: #95c090;
+    }
+    #cpni23 {
+      background-color: #64aeae;
+    }
+    #cpni24 {
+      background-color: #8ab4b6;
+    }
+
+
+
 
   #ncp-closebtn {
     position: fixed;
@@ -349,7 +671,7 @@ td:nth-child(2) {
     z-index: 2;
   }
 
-   #overlay-name-form-closebtn, #overlay-room-form-closebtn {
+   #overlay-name-form-closebtn, #overlay-room-form-closebtn, #overlay-color-form-closebtn {
     position: absolute;
     top: 20px;
     right: 45px;
@@ -360,22 +682,37 @@ td:nth-child(2) {
     cursor: pointer;
   }
 
-  #overlay-name-form-closebtn:hover, #overlay-room-form-closebtn:hover {
+  #overlay-name-form-closebtn:hover, #overlay-room-form-closebtn:hover, #overlay-color-form-closebtn:hover {
     color: #f1f1f1;
     transition: 0.3s;
   }
 
   #overlay-name-form {
-    display: block;
+    /*display: block;*/
+    display: none; /* fix after adding polls */
   }
     #overlay-room-form {
       display: none;
+    }
+
+    #overlay-name-color {
+      display: block;
     }
 
 
   #overlay-name-form p, #overlay-room-form p {
     color: white;
     text-align: center;
+  }
+
+  #overlay-name-color h2, #overlay-name-color h3 {
+    display: block;
+    width: 400px;
+    margin: 0px auto;
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+    top: 10px;
   }
 
   #overlay-name-rules, #overlay-room-rules {
@@ -593,3 +930,6 @@ td:nth-child(2) {
     width: 550px;
   }
 }
+
+
+

@@ -16,8 +16,6 @@ const timestamp = () => {
 $('.controls').hide();
 
 
-$('.name-color-picker').hide();
-
 $('#overlay-name-form-closebtn').on('click', () => {
 	$('#overlay-name-form').hide();
 	$('#chat-input').focus();
@@ -158,68 +156,277 @@ $('#roomlist').on('click', (event) => {
 
 
 $('#name-color-button').on('click', (event) => {
-	$('.name-color-picker').css({'position': 'absolute', 'top': event.pageY, 'left': event.pageX});
-	$('.name-color-picker').show();
+	$('#overlay-name-color').show();
+	$('.controls').hide();
 });
 
 
-// colors:
-	$('#ncp1').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#FE2712'})
-	})
-
-	$('#ncp2').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#FC600A'})
-	})
-
-	$('#ncp3').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#FB9902'})
-	})
-
-	$('#ncp4').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#FCCC1A'})
-	})
-
-	$('#ncp5').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#FEFE33'})
-	})
-
-	$('#ncp6').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#B2D732'})
-	})
-
-	$('#ncp7').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#66B032'})
-	})
-
-	$('#ncp8').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#347C98'})
-	})
-
-  $('#ncp9').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#0247FE'})
-	})
-
-  $('#ncp10').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#4424D6'})
-	})
-
-  $('#ncp11').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#8601AF'})
-	})
-
-  $('#ncp12').on('click', () => {
-		sock.emit('changeUserColor', {colorCode: '#C21460'})
-	})
 
 
+	$('#overlay-color-form-accept').on('click', () => {
+		$('#overlay-name-color').hide();
+	});
 
-$("body > *").not("body > button").click(function(event) {
-  if(event.target.id=='name-color-button' || event.target.id=='name-color-picker' || event.target.id=='ncpcolor'){
-    return false;
-  }
-  $('.name-color-picker').hide();
-});
+	$('#overlay-color-form-close').on('click', () => {
+		$('#overlay-name-color').hide();
+		sock.emit('changeUserColor', {colorCodeBG: '#ff00', colorCode: '#cccccc'});
+	});
+
+
+// background colors
+	$('#cpno').on('click', () => {
+		$('#name-color-preview').css({'background-color': 'black'});
+		sock.emit('changeUserColor', {colorCodeBG: 'black'});
+	});
+
+	$('#cpno1').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#112135'});
+		sock.emit('changeUserColor', {colorCodeBG: '#112135'});
+	});
+
+	$('#cpno2').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#152b49'});
+		sock.emit('changeUserColor', {colorCodeBG: '#152b49'});
+	});
+
+	$('#cpno3').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#1c1b39'});
+		sock.emit('changeUserColor', {colorCodeBG: '#1c1b39'});
+	});
+
+	$('#cpno4').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#222248'});
+		sock.emit('changeUserColor', {colorCodeBG: '#222248'});
+	});
+
+	$('#cpno5').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#231931'});
+		sock.emit('changeUserColor', {colorCodeBG: '#231931'});
+	});
+
+	$('#cpno6').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#2c213d'});
+		sock.emit('changeUserColor', {colorCodeBG: '#2c213d'});
+	});
+
+	$('#cpno7').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#2f1630'});
+		sock.emit('changeUserColor', {colorCodeBG: '#2f1630'});
+	});
+
+	$('#cpno8').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#431d41'});
+		sock.emit('changeUserColor', {colorCodeBG: '#431d41'});
+	});
+
+	$('#cpno9').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#551b29'});
+		sock.emit('changeUserColor', {colorCodeBG: '#551b29'});
+	});
+
+	$('#cpno10').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#651f2c'});
+		sock.emit('changeUserColor', {colorCodeBG: '#651f2c'});
+	});
+
+	$('#cpno11').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#572b23'});
+		sock.emit('changeUserColor', {colorCodeBG: '#572b23'});
+	});
+
+	$('#cpno12').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#6d392b'});
+		sock.emit('changeUserColor', {colorCodeBG: '#6d392b'});
+	});
+
+	$('#cpno13').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#593925'});
+		sock.emit('changeUserColor', {colorCodeBG: '#593925'});
+	});
+
+	$('#cpno14').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#6c462a'});
+		sock.emit('changeUserColor', {colorCodeBG: '#6c462a'});
+	});
+
+	$('#cpno15').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#5d4625'});
+		sock.emit('changeUserColor', {colorCodeBG: '#5d4625'});
+	});
+
+	$('#cpno16').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#73582d'});
+		sock.emit('changeUserColor', {colorCodeBG: '#73582d'});
+	});
+
+	$('#cpno17').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#5d5527'});
+		sock.emit('changeUserColor', {colorCodeBG: '#5d5527'});
+	});
+
+	$('#cpno18').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#72692e'});
+		sock.emit('changeUserColor', {colorCodeBG: '#72692e'});
+	});
+
+	$('#cpno19').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#3a3c18'});
+		sock.emit('changeUserColor', {colorCodeBG: '#3a3c18'});
+	});
+
+	$('#cpno20').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#4c5420'});
+		sock.emit('changeUserColor', {colorCodeBG: '#4c5420'});
+	});
+
+	$('#cpno21').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#123414'});
+		sock.emit('changeUserColor', {colorCodeBG: '#123414'});
+	});
+
+	$('#cpno22').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#16481d'});
+		sock.emit('changeUserColor', {colorCodeBG: '#16481d'});
+	});
+
+	$('#cpno23').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#0c2220'});
+		sock.emit('changeUserColor', {colorCodeBG: '#0c2220'});
+	});
+
+	$('#cpno24').on('click', () => {
+		$('#name-color-preview').css({'background-color': '#123431'});
+		sock.emit('changeUserColor', {colorCodeBG: '#123431'});
+	});
+
+
+// font colors
+	$('#cpni').on('click', () => {
+		$('#name-color-preview').css({'color': 'white'});
+		sock.emit('changeUserColor', {colorCode: 'white'});
+	});
+
+	$('#cpni1').on('click', () => {
+		$('#name-color-preview').css({'color': '#5e90b6'});
+		sock.emit('changeUserColor', {colorCode: '#5e90b6'});
+	});
+
+	$('#cpni2').on('click', () => {
+		$('#name-color-preview').css({'color': '#83a1c7'});
+		sock.emit('changeUserColor', {colorCode: '#83a1c7'});
+	});
+
+	$('#cpni3').on('click', () => {
+		$('#name-color-preview').css({'color': '#6c7fae'});
+		sock.emit('changeUserColor', {colorCode: '#6c7fae'});
+	});
+
+	$('#cpni4').on('click', () => {
+		$('#name-color-preview').css({'color': '#8896ba'});
+		sock.emit('changeUserColor', {colorCode: '#8896ba'});
+	});
+
+	$('#cpni5').on('click', () => {
+		$('#name-color-preview').css({'color': '#8c76aa'});
+		sock.emit('changeUserColor', {colorCode: '#8c76aa'});
+	});
+
+	$('#cpni6').on('click', () => {
+		$('#name-color-preview').css({'color': '#9a8bb9'});
+		sock.emit('changeUserColor', {colorCode: '#9a8bb9'});
+	});
+
+	$('#cpni7').on('click', () => {
+		$('#name-color-preview').css({'color': '#ac74a9'});
+		sock.emit('changeUserColor', {colorCode: '#ac74a9'});
+	});
+
+	$('#cpni8').on('click', () => {
+		$('#name-color-preview').css({'color': '#b991b5'});
+		sock.emit('changeUserColor', {colorCode: '#b991b5'});
+	});
+
+	$('#cpni9').on('click', () => {
+		$('#name-color-preview').css({'color': '#d26262'});
+		sock.emit('changeUserColor', {colorCode: '#d26262'});
+	});
+
+	$('#cpni10').on('click', () => {
+		$('#name-color-preview').css({'color': '#e18a73'});
+		sock.emit('changeUserColor', {colorCode: '#e18a73'});
+	});
+
+	$('#cpni11').on('click', () => {
+		$('#name-color-preview').css({'color': '#d58b59'});
+		sock.emit('changeUserColor', {colorCode: '#d58b59'});
+	});
+
+	$('#cpni12').on('click', () => {
+		$('#name-color-preview').css({'color': '#e4a770'});
+		sock.emit('changeUserColor', {colorCode: '#e4a770'});
+	});
+
+	$('#cpni13').on('click', () => {
+		$('#name-color-preview').css({'color': '#df9a57'});
+		sock.emit('changeUserColor', {colorCode: '#df9a57'});
+	});
+
+	$('#cpni14').on('click', () => {
+		$('#name-color-preview').css({'color': '#e3b771'});
+		sock.emit('changeUserColor', {colorCode: '#e3b771'});
+	});
+
+	$('#cpni15').on('click', () => {
+		$('#name-color-preview').css({'color': '#e5af59'});
+		sock.emit('changeUserColor', {colorCode: '#e5af59'});
+	});
+
+	$('#cpni16').on('click', () => {
+		$('#name-color-preview').css({'color': '#e6c774'});
+		sock.emit('changeUserColor', {colorCode: '#e6c774'});
+	});
+
+	$('#cpni17').on('click', () => {
+		$('#name-color-preview').css({'color': '#e7cb5b'});
+		sock.emit('changeUserColor', {colorCode: '#e7cb5b'});
+	});
+
+	$('#cpni18').on('click', () => {
+		$('#name-color-preview').css({'color': '#e4d376'});
+		sock.emit('changeUserColor', {colorCode: '#e4d376'});
+	});
+
+	$('#cpni19').on('click', () => {
+		$('#name-color-preview').css({'color': '#a4b571'});
+		sock.emit('changeUserColor', {colorCode: '#a4b571'});
+	});
+
+	$('#cpni20').on('click', () => {
+		$('#name-color-preview').css({'color': '#c0d088'});
+		sock.emit('changeUserColor', {colorCode: '#c0d088'});
+	});
+
+	$('#cpni21').on('click', () => {
+		$('#name-color-preview').css({'color': '#6eb16d'});
+		sock.emit('changeUserColor', {colorCode: '#6eb16d'});
+	});
+
+	$('#cpni22').on('click', () => {
+		$('#name-color-preview').css({'color': '#95c090'});
+		sock.emit('changeUserColor', {colorCode: '#95c090'});
+	});
+
+	$('#cpni23').on('click', () => {
+		$('#name-color-preview').css({'color': '#64aeae'});
+		sock.emit('changeUserColor', {colorCode: '#64aeae'});
+	});
+
+	$('#cpni24').on('click', () => {
+		$('#name-color-preview').css({'color': '#8ab4b6'});
+		sock.emit('changeUserColor', {colorCode: '#8ab4b6'});
+	});
+
+
 
 
 $('#controls-menu').on('click', () => {

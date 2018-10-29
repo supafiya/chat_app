@@ -87,58 +87,117 @@
 	  </div>
 
 	  <div class="overlay" id="overlay-name-form">
-	  			<a href="javascript:void(0)" id="overlay-name-form-closebtn">&times;</a>
-	  			<form id="name-form">
-	  				<p>Enter your name:</p>
-	  				<input id="name-input" name="name-input" autofocus>
-	  				<button>Ok</button>
-	  			</form>
-	  			<ul id="overlay-name-rules">Names must:
-	  				<li>be between 4 and 16 characters.</li>
-	  				<li>not contain the word 'Admin' keyword.</li>
-	  				<li>only include A-Z, 0-9, underscores and spaces.</li>
-	  			</ul>
-	  			<p id="overlay-name-rules-invalid">Invalid name!</p>
-	  		</div>
-
-	  	<div class="overlay" id="overlay-room-form">
-	  				<a href="javascript:void(0)" id="overlay-room-form-closebtn">&times;</a>
-	  			<form id="room-form">
-	  				<p>Enter a new or existing room name:</p>
-	  				<input id="room-input" name="room-input">
-	  				<button>Ok</button>
-	  			</form>
-	  			<ul id="overlay-room-rules">Room name must:
-	  				<li>be between 4 and 16 characters.</li>
-	  				<li>not contain the word 'Admin' keyword.</li>
-	  				<li>only include A-Z, 0-9, underscores and spaces.</li>
-	  			</ul>
-
-	  			<p id="overlay-room-invalid">Already in that room!</p>
-	  		</div>
-
-		<div class="name-color-picker" id="name-color-picker">
-			<a href="javascript:void(0)" id="ncp1"></a>
-			<a href="javascript:void(0)" id="ncp2"></a>
-			<a href="javascript:void(0)" id="ncp3"></a>
-			<a href="javascript:void(0)" id="ncp4"></a>
-			<a href="javascript:void(0)" id="ncp5"></a>
-			<a href="javascript:void(0)" id="ncp6"></a>
-			<a href="javascript:void(0)" id="ncp7"></a>
-			<a href="javascript:void(0)" id="ncp8"></a>
-			<a href="javascript:void(0)" id="ncp9"></a>
-			<a href="javascript:void(0)" id="ncp10"></a>
-			<a href="javascript:void(0)" id="ncp11"></a>
-			<a href="javascript:void(0)" id="ncp12"></a>
+	  	<a href="javascript:void(0)" id="overlay-name-form-closebtn">&times;</a>
+	  	<form id="name-form">
+	  		<p>Enter your name:</p>
+	  		<input id="name-input" name="name-input" autofocus>
+	  		<button>Ok</button>
+	  	</form>
+	  	<ul id="overlay-name-rules">Names must:
+	  		<li>be between 4 and 16 characters.</li>
+	  		<li>not contain the word 'Admin' keyword.</li>
+	  		<li>only include A-Z, 0-9, underscores and spaces.</li>
+	  	</ul>
+	  	<p id="overlay-name-rules-invalid">Invalid name!</p>
 	  </div>
 
+	  <div class="overlay" id="overlay-room-form">
+	  	<a href="javascript:void(0)" id="overlay-room-form-closebtn">&times;</a>
+	  	<form id="room-form">
+	  		<p>Enter a new or existing room name:</p>
+	  		<input id="room-input" name="room-input">
+	  		<button>Ok</button>
+	  	</form>
+	  	<ul id="overlay-room-rules">Room name must:
+	  		<li>be between 4 and 16 characters.</li>
+	  		<li>not contain the word 'Admin' keyword.</li>
+	  		<li>only include A-Z, 0-9, underscores and spaces.</li>
+	  	</ul>
+	  	<p id="overlay-room-invalid">Already in that room!</p>
+	  </div>
+
+	  <div class="overlay" id="overlay-name-color">
+
+	  	<div class="color-picker">
+	  		<div id="color-picker-box-controls">
+	  			<a href="javascript:void(0)" id="overlay-color-form-accept">&checkmark;</a>
+					<a href="javascript:void(0)" id="overlay-color-form-close">&times;</a>
+	  		</div>
+
+	  		<h4 id="name-color-preview">Preview</h4>
+	  		<div id="color-picker-name-outer">
+	  			<p>Text Background Color</p>
+	  			<div id="cpno1"></div>
+	  			<div id="cpno2"></div>
+	  			<div id="cpno3"></div>
+	  			<div id="cpno4"></div>
+	  			<div id="cpno5"></div>
+	  			<div id="cpno6"></div>
+	  			<div id="cpno7"></div>
+	  			<div id="cpno8"></div>
+	  			<div id="cpno9"></div>
+	  			<div id="cpno10"></div>
+	  			<div id="cpno11"></div>
+	  			<div id="cpno12"></div>
+	  			<div id="cpno13"></div>
+	  			<div id="cpno14"></div>
+	  			<div id="cpno15"></div>
+	  			<div id="cpno16"></div>
+	  			<div id="cpno17"></div>
+	  			<div id="cpno18"></div>
+	  			<div id="cpno19"></div>
+	  			<div id="cpno20"></div>
+	  			<div id="cpno21"></div>
+	  			<div id="cpno22"></div>
+	  			<div id="cpno23"></div>
+	  			<div id="cpno24"></div>
+
+	  		</div>
+	  		<div id="color-picker-name-inner">
+	  			<p>Text Color</p>
+	  			<div id="cpni1"></div>
+	  			<div id="cpni2"></div>
+	  			<div id="cpni3"></div>
+	  			<div id="cpni4"></div>
+	  			<div id="cpni5"></div>
+	  			<div id="cpni6"></div>
+	  			<div id="cpni7"></div>
+	  			<div id="cpni8"></div>
+	  			<div id="cpni9"></div>
+	  			<div id="cpni10"></div>
+	  			<div id="cpni11"></div>
+	  			<div id="cpni12"></div>
+	  			<div id="cpni13"></div>
+	  			<div id="cpni14"></div>
+	  			<div id="cpni15"></div>
+	  			<div id="cpni16"></div>
+	  			<div id="cpni17"></div>
+	  			<div id="cpni18"></div>
+	  			<div id="cpni19"></div>
+	  			<div id="cpni20"></div>
+	  			<div id="cpni21"></div>
+	  			<div id="cpni22"></div>
+	  			<div id="cpni23"></div>
+	  			<div id="cpni24"></div>
+	  		</div>
+
+	  		<div id="color-picker-name-controls">
+	  			<div id="cpno">Black</div>
+	  			<div id="cpni">White</div>
+	  		</div>
 
 
 
+	  	</div>
+
+
+
+	  </div>
 	</div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
   <script src="js/client.js"></script>
   <script src="js/client-jq.js"></script>
 </body>

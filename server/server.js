@@ -14,7 +14,7 @@ const path = require('path');
 
 const Users = require('./users');
 const validation = require('./validation');
-const chatcmd = require('./chatcommands');
+//const chatcmd = require('./chatcommands');
 
 
 app.use(express.static(path.join(clientPath)));
@@ -33,6 +33,7 @@ io.on('connection', (sock) => {
 	connectionCount++;
 	sock.conId = connectionCount;
 	sock.color = '#ccc';
+	sock.bgcolor = '#FFF0';
 
 
 // this is the only exception to not use the joinRoom function. Room is already defined for user class.
@@ -74,8 +75,16 @@ io.on('connection', (sock) => {
 
 // changes a users name color.
 	sock.on('changeUserColor', (data) => {
-		color = data.colorCode
-		sock.color = color
+		color = data.colorCode;
+		bgcolor = data.colorCodeBG;
+		if (color) {
+			sock.color = color;
+		};
+		if (bgcolor) {
+			sock.bgcolor = bgcolor;
+		};
+
+
 	})
 
 // emits a list of users in a certain room to the user that requested it.
@@ -284,7 +293,7 @@ fix name duplicate support!
 		// this is where the message is sent back to the clients in the room it originated from.
 					let fix1 = text.replace(/</g, "&lt;");
 					let fix2 = fix1.replace(/>/g, "&gt;");
-					io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: user.name, message: fix2, userColor: sock.color})
+					io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: user.name, message: fix2, userColor: sock.color, userColorBG: sock.bgcolor})
 					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} chat message: ${userOldRoom}: ${users.getUser(sock.id).name}: ${text}`);
 				};
 
