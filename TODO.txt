@@ -11,21 +11,14 @@ DONE // no empty text allowed.
 DONE // notification of new message, browser tab blinks or highlighted, sound option.
 
 DONE // join multiple rooms through tabs up at the top (not browser tabs)
-				DONE // send usetlist update to every room a user is in that changed their name.
-				DONE // when you close a room, userlist needs to be updated.
-				DONE // when user joins a room, update that rooms userlist.
-					room list (not browser) should flash when new msg
 
 DONE //append name with _# if name already exists.
-				small bugs to fix.
-				person can name themselves (user_#) to duplicate names, possibly reserve any name (user_#)
+				//too many bugs, revisit this.
 
 partly done // spambot
 	work on /roll and name/room change speed.
 
 room leaders + commands /kick /ban (0 being forever) /mute /unmute /-create polls-/ + dropdown menu for these commands
-
-add a /help command
 
 hyperlinks
 
@@ -35,4 +28,6 @@ private messages
 
 polls
 
+room list (not browser) should flash when new msg
 
+add a /help command

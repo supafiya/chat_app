@@ -14,6 +14,7 @@ const path = require('path');
 
 const Users = require('./users');
 const validation = require('./validation');
+const chatcmd = require('./chatcommands');
 
 
 app.use(express.static(path.join(clientPath)));
@@ -48,8 +49,8 @@ io.on('connection', (sock) => {
 	function welcomeMessage() {
 		sock.emit('message', {userroom: 'lobby', message: 'Welcome, you are (user_' + sock.conId + ')', username: 'Admin'});
 		io.to('lobby').emit('message', {userroom: 'lobby' ,username: 'Admin', message: `(user_${sock.conId}) has joined.`});
-		io.to('lobby').emit('updateroomname', users.getUser(sock.id).room);
-		io.to('lobby').emit('updateuserlist', {userlist: users.getUserList('lobby'), userroom: 'lobby'});
+		sock.emit('updateroomname', users.getUser(sock.id).room);
+		io.to('lobby').emit('needsUsersList');
 		console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} ip: ${address} user connected: ${users.getUser(sock.id).name}`);
 	}
 		welcomeMessage();
@@ -61,12 +62,15 @@ io.on('connection', (sock) => {
 	});
 
 	sock.on('userRoll', (data) => {
+		rollDice(data);
+	});
+
+	function rollDice(data) {
 		let userOldRoom = data.userroom.replace(/ /gi, "_SPACE_");
-		let randomNumber = Math.floor(Math.random() * 101)
+		let randomNumber = Math.floor(Math.random() * 101);
 		io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: 'Admin', message: user.name + ' has rolled ' + randomNumber + '.'});
 		console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${userOldRoom}: ${user.name} rolled ${randomNumber} `);
-
-	})
+	};
 
 // changes a users name color.
 	sock.on('changeUserColor', (data) => {
@@ -115,17 +119,29 @@ io.on('connection', (sock) => {
 
 // client name change functionality. ##### regExp needs to be utilized #####
 	sock.on('nameChange', (data) => {
+		changeName(data);
+	});
+
+	function changeName(data) {
 		let user = users.getUser(sock.id);
 		let userOldRoom = data.currentRoom;
 		let oldName = user.name;
 		let name = data.newName;
+		let origin = data.origin;
 
-		if (validation.identities(name) === false) {
+
+		if (validation.identities(name) === false && origin === 'overlay') {
 			sock.emit('nameChangeReturn', false);
 
-		} else if (name === oldName) {
-			sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: 'Your name is already ' + user.name + '!'})
+		} else if (validation.identities(name) === false && origin === 'chatcmd') {
+			sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: 'Invalid name.'});
+
+		} else if (name === oldName && origin === 'overlay') {
+			sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: 'Your name is already ' + user.name + '!'});
 			sock.emit('nameChangeReturn', false);
+
+		} else if (name === oldName && origin === 'chatcmd') {
+			sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: 'Your name is already ' + user.name + '!'});
 
 		} else {
 			nameLC = name.trim();
@@ -177,22 +193,46 @@ fix name duplicate support!
 				console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${oldName} changed name to ${user.name}`);
 			}
 		};
-	});
+	};
 
 // room enter functionality. this isn't them leaving one room an joining another, this is the client simply joining another room in addition to their current rooms.
 	sock.on('roomChange', (data) => {
-		let room = data.newRoom.replace(/ /g, '_SPACE_')
-		let userOldRoom = data.currentRoom;
-		if (validation.identities(room) === false) {
-			sock.emit('roomChangeReturn', false);
-		} else {
-			let user = users.getUser(sock.id);
-			let oldName = user.name;
+		joinRoom(data);
+	});
 
-			if (userOldRoom === room) {
-				sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: ' You are already in that room!'});
-				sock.emit('roomChangeReturn', 'alreadyInRoom');
+	function joinRoom(data) {
+		let room = data.newRoom.trim().replace(/ /g, '_SPACE_');
+		let userOldRoom = data.currentRoom;
+		let userRooms = user.room;
+		let origin = data.origin;
+
+		function checkRooms() {
+			for(let i = 0, length1 = userRooms.length; i < length1; i++){
+				if(userRooms[i].toLowerCase() === room.toLowerCase()) {
+					return false;
+				}
+			};
+		};
+
+		if (checkRooms() === false) {
+			sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: ' You are already in that room!'});
+		} else {
+
+			if (validation.identities(room) === false && origin === 'overlay') {
+				sock.emit('roomChangeReturn', false);
+
+			} else if (validation.identities(room) === false && origin === chatcmd) {
+				sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: ' Invalid room name.'});
+
 			} else {
+				let user = users.getUser(sock.id);
+				let oldName = user.name;
+
+				if (user.room.includes(room)) {
+					sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: ' You are already in that room!'});
+					sock.emit('roomChangeReturn', 'alreadyInRoom');
+
+				} else {
 					sock.emit('joinRoom', {userroom: room});
 					io.to(room).emit('message', {userroom: room, message: user.name + ' has joined the room.', username: 'Admin'});
 					user.room.push(room);
@@ -203,11 +243,10 @@ fix name duplicate support!
 					sock.emit('roomChangeReturn', true, room);
 					console.log(user.name + ' has entered room: ' + room);
 					io.to(room).emit('updateuserlist', {userlist: users.getUserList(room), userroom: room});
-
-
-			}
-		}
-	});
+				};
+			};
+		};
+	};
 
 // message functionality.
 	sock.on('userMessage', (data) => {
@@ -218,62 +257,27 @@ fix name duplicate support!
 
 		if (validation.messageInput(text) === true) {
 
-			// ##### chat commands need their own module #####
+			// change sock.on to functions and the sock.on sends data to function
 
 				if (text.slice(0, 6) === '/join ' || text.slice(0, 6) === '/room ') {
-					// try simply sock.emit('roomChange', {data: here, and: here})
 					let len = text.length;
-					let joinVar = text.slice(6, len).trim();
-					if (validation.identities(joinVar) === true) {
-						if (userOldRoom === joinVar) {
-							sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: 'You are already in that room!'});
-						} else {
-							user.room += joinVar;
-							sock.emit('updateroomname', joinVar);
-							sock.leave(userOldRoom);
-							sock.join(joinVar);
-							io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: 'Admin', message: user.name + ' has left the room.'});
-
-							sock.emit('message', {username: 'Admin', message: 'You are now in room ', userroom: joinVar})
-
-							sock.broadcast.to(user.room).emit('message', {userroom: joinVar, username: 'Admin', message: user.name + ' has joined the room.'});
-
-
-							io.emit('updateroomlist', users.getRoomOccupantNumber());
-						};
-
-					} else {
-						sock.emit('message', {userroom: userOldRoom, message: 'Invalid room name', username: 'Admin'});
-						return false;
-					}
+					let newRoom = text.slice(6, len);
+					joinRoom({newRoom: newRoom, currentRoom: userOldRoom, origin: 'chatcmd'});
 
 				} else if (text.slice(0, 6) === '/name ') {
 					let len = text.length;
-					let joinVar = text.slice(6, len);
-					if (validation.identities(joinVar) === true) {
-						user.name = joinVar;
-
-
-						io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: 'Admin', message: oldName + ' has changed their name to ' + user.name + '.'});
-
-						console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${oldName} changed name to ${user.name}`);
-					} else {
-						sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: 'Invalid name'});
-						return false;
-					};
-
-
+					let newName = text.slice(6, len);
+					changeName({newName: newName, currentRoom: userOldRoom, origin: 'chatcmd'});
 
 				} else if (text.slice(0, 5) === '/roll') {
-					let randomNumber = Math.floor(Math.random() * 101)
-					io.to(userOldRoom).emit('message', {userroom: userOldRoom, username: 'Admin', message: user.name + ' has rolled ' + randomNumber + '.'});
-					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)}: ${userOldRoom}: ${user.name} rolled ${randomNumber} `);
+					console.log(text.length)
+					// if length = 5, send rollDice(data), if longer check for number use roll number for high end roll variable
+					rollDice(data)
 
 				} else if (text.slice(0, 6) === '/color') {
 					let len = text.length;
 					let newColor = text.slice(6, len);
 					sock.color = newColor;
-
 
 				}	else {
 
@@ -284,7 +288,7 @@ fix name duplicate support!
 					console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} chat message: ${userOldRoom}: ${users.getUser(sock.id).name}: ${text}`);
 				};
 
-			// sends response returned response from validation module if it failed.
+		// sends response returned response from validation module if it failed.
 			} else {
 				sock.emit('message', {userroom: userOldRoom, username: 'Admin', message: validation.messageInput(text)});
 			};
@@ -297,8 +301,7 @@ fix name duplicate support!
 
 // emit user list for which room the user is in.
 	sock.on('updateuserslist', (data) => {
-		room = data.userroom;
-	//	console.log('room tried to update list: ' + room)
+		room = data.userroom.replace(/ /gi, "_SPACE_");
 		sock.emit('updateuserlist', {userlist: users.getUserList(room), userroom: room})
 	});
 
@@ -306,14 +309,13 @@ fix name duplicate support!
 	sock.on('disconnect', () => {
 		let user = users.getUser(sock.id);
 		let userOldRoom = user.room;
-		let oldName = user.name
-		io.to(user.room).emit('message', {userroom: userOldRoom, username: 'Admin', message: user.name + ' has disconnected.'});
-
+		let oldName = user.name;
+		let userRooms = user.room;
 		console.log(`${getTime('fullDate', 2)} ${getTime('timeOfDay', 3)} user disconnected: ${users.getUser(sock.id).name}`);
-
-		let currentroom = users.getUser(sock.id).room
 		users.removeUser(sock.id);
-
+		userRooms.forEach(function (i) {
+			io.to(i).emit('needsUsersList').emit('message', {userroom: i, username: 'Admin', message: user.name + ' has disconnected.'});
+		});
 		io.emit('updateroomlist', users.getRoomOccupantNumber());
 
 	});

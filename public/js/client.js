@@ -45,11 +45,11 @@ sock.on('message', (data) => {
   	</tr>
  	 `
 		parent.scrollTop = parent.scrollHeight;﻿
-	} else {
+	} else {	//  style="color:${userColor}; background-color:#ff5c5c; font-weight:bold;" add background color option
 		parent.innerHTML += `
 		<tr>
     	<td class="time">${timestamp()}</td>
-    	<td><span style="color:${userColor}">${user}:</span> ${message}</td>
+    	<td><span style="color:${userColor};">${user}:</span> ${message}</td>
   	</tr>
  	 `
  	 parent.scrollTop = parent.scrollHeight;﻿
@@ -98,7 +98,7 @@ sock.on('joinRoom', (data) => {
 		const text = input.value;
 		input.value = '';
 		const roomName = document.querySelector('#room-name').innerHTML;
-		sock.emit('nameChange', {newName: text, currentRoom: roomName});
+		sock.emit('nameChange', {newName: text, currentRoom: roomName, origin: 'overlay'});
 	};
 	// receive the information from the server
 	sock.on('nameChangeReturn', (res) => {
@@ -130,7 +130,7 @@ sock.on('joinRoom', (data) => {
 		const roomName = document.querySelector('#room-name').innerHTML;
 		const text = input.value;
 		input.value = '';
-		sock.emit('roomChange', {newRoom: text, currentRoom: roomName});
+		sock.emit('roomChange', {newRoom: text, currentRoom: roomName, origin: 'overlay'});
 	};
 	// receive the information from the server
 	sock.on('roomChangeReturn', (res, room) => {
@@ -155,6 +155,12 @@ sock.on('joinRoom', (data) => {
 		};
 	});
 
+sock.on('needsUsersList', () => {
+	const roomName = document.querySelector('#room-name');
+	let userOldRoom = roomName.innerHTML;
+
+	sock.emit('updateuserslist', {userroom: userOldRoom})
+})
 
 sock.on('updateuserlist', function (data) {
 	const parent = document.querySelector('#userlist');
