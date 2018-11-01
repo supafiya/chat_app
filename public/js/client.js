@@ -37,6 +37,7 @@ sock.on('message', (data) => {
 	let userbgColor = data.userColorBG;
 
 	const parent = document.querySelector(`.events-table-${room}`);
+	console.log('in message func ' + room)
 
 	if (data.username === 'Admin') {
 		parent.innerHTML += `
@@ -81,10 +82,38 @@ sock.on('joinRoom', (data) => {
 	parentLi.innerHTML +=`
 	<li class="active-user-room">${room}<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>`
 
+});
 
+
+sock.on('privateMessage', (data) => {
+	let user = data.username;
+	let userid = data.userid;
+	let roomName = data.userroom;
+	let parent = document.querySelector('.events-tables');
+	$('.user-room-list').children().removeClass('active-user-room')
+
+	for (let i = 0; i < parent.children.length; i++) {
+		parent.children[i].style.display = 'none';
+	}
+
+	parent.innerHTML +=`
+	<table id="events" class="events-table-${roomName}">
+	</table>`;
+
+	console.log('created: events-table-' + roomName )
+	const parentLi = document.querySelector('.user-room-list');
+	parentLi.innerHTML +=`
+	<li class="active-user-room">${user}<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>`
+
+});
+
+
+
+
+sock.on('requestPrivate', (data) => {
+	let room = data.userroom;
+	sock.emit('requestPrivateResponse', {userroom: room})
 })
-
-
 
 
 

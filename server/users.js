@@ -17,6 +17,9 @@ class Users {
 	getUser (id) {
 		return this.users.filter((user) => user.id === id)[0];
 	}
+	getUserFromName (name) {
+		return this.users.filter((user) => user.name === name)[0];
+	}
 	getUserList (room) {
 		let usersArr = this.users;
 		let arr = [];
@@ -45,10 +48,6 @@ class Users {
 			}
 		}
 		return roomArr;
-
-		//let rooms = this.users.map((user) => user.room);
-		//let unique = [...new Set(rooms)];
-   	//return unique;
 
   }
 	getRoomOccupantNumber() {

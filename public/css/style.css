@@ -139,6 +139,10 @@ button:focus, input:focus {
       left: -35px;
     }
 
+    #roomlist li:hover {
+      color: #fbdbdb;
+    }
+
   .user-room-list {
     display: block;
     height: 100px;
@@ -688,15 +692,15 @@ td:nth-child(2) {
   }
 
   #overlay-name-form {
-    /*display: block;*/
-    display: none; /* fix after adding polls */
+    display: block;
+   /* fix after adding polls */
   }
     #overlay-room-form {
       display: none;
     }
 
     #overlay-name-color {
-      display: block;
+      display: none;
     }
 
 
@@ -815,6 +819,13 @@ td:nth-child(2) {
     #userlist {
       list-style: none;
       color: #C5C6C7;
+    }
+
+    #userlist li {
+    cursor: pointer;
+    }
+    #userlist li:hover {
+      color:#fbdbdb;
     }
 
 

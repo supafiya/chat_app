@@ -59,6 +59,15 @@ $('#timestamp-button').on('click', () => {
 
 });
 
+$('#userlist').on('click', (event) => {
+	let val = $(event.target).text();
+	const valPersist = val;
+	sock.emit('sendPrivateMessage', {username: val, message: 'New Private Chat'})
+
+})
+
+
+
 
 $('ul.user-room-list').on('click', (event) => {
 	let val = $(event.target).text().slice(0, -1)
