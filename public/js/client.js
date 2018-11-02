@@ -25,7 +25,24 @@ const onChatFormSubmitted = (event) => {
 	input.value = '';
 	let room = document.querySelector('#room-name').innerHTML;
 	let roomfix = room.replace(/ /gi, "_SPACE_");
-	sock.emit('userMessage', {message: text, userroom: roomfix});
+	let aur = $('.active-user-room')[0].classList;
+	let pmRoomNum;
+
+	if (aur[1]) {
+		for(let i = 0, length1 = aur.length; i < length1; i++){
+			if (aur[i].slice(0, 6) === 'roomID') {
+				pmRoomNum = aur[i].replace(/roomID_/gi, "pm-")
+			}
+		}
+		sock.emit('userMessage', {message: text, userroom: pmRoomNum});
+	} else {
+		sock.emit('userMessage', {message: text, userroom: roomfix});
+		console.log('message sent to: ' + aur)
+
+	}
+
+
+
 };
 
 // receive message information from the server
@@ -88,6 +105,7 @@ sock.on('joinRoom', (data) => {
 sock.on('privateMessage', (data) => {
 	let user = data.username;
 	let userid = data.userid;
+	let roomid = data.roomid
 	let roomName = data.userroom;
 	let parent = document.querySelector('.events-tables');
 	$('.user-room-list').children().removeClass('active-user-room')
@@ -97,13 +115,16 @@ sock.on('privateMessage', (data) => {
 	}
 
 	parent.innerHTML +=`
-	<table id="events" class="events-table-${roomName}">
+	<table id="events" class="events-table-${roomName} ${roomid}">
 	</table>`;
 
-	console.log('created: events-table-' + roomName )
+
+	// THIS selects the actual rooms ID, use this to update jquery client file for events related to changing room views
+	//let tester = $('.' + roomid)[0].classList[1];
+	//console.log('roomid class: ' + tester)
 	const parentLi = document.querySelector('.user-room-list');
 	parentLi.innerHTML +=`
-	<li class="active-user-room">${user}<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>`
+	<li class="active-user-room ${roomid}">${user}<a href="javascript:void(0)" id="user-room-list-close-btn">&times;</a></li>`
 
 });
 

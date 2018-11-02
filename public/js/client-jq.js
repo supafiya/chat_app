@@ -61,8 +61,8 @@ $('#timestamp-button').on('click', () => {
 
 $('#userlist').on('click', (event) => {
 	let val = $(event.target).text();
-	const valPersist = val;
-	sock.emit('sendPrivateMessage', {username: val, message: 'New Private Chat'})
+	//const valPersist = val;
+	sock.emit('sendPrivateMessage', {username: val, roomname: val})
 
 })
 
@@ -75,55 +75,71 @@ $('ul.user-room-list').on('click', (event) => {
 	let tar = $(event.target).parent();
 	let tartext = tar.text().slice(0, -1)
 	const roomName = document.querySelector('#room-name');
+	let ulClassLi = event.target.classList;
+	console.log(ulClassLi)
+	let classFix;
 
-	if (event.target.tagName === 'LI') {
+	for(let i = 0, length1 = ulClassLi.length; i < length1; i++){
+		console.log(': class loop: ' + ulClassLi[i])
+		if (ulClassLi[i].slice(0, 6) === 'roomID') {
+			classFix = ulClassLi[i]
+		}
+	}
+
+
+
+	if (classFix && event.target.tagName === 'LI') {
 		$('.events-tables').children().hide();
-		$('.events-table-' + val.replace(/ /gi, "_SPACE_")).show();
+		$('.' + classFix).show();
 		$('.user-room-list').children().removeClass('active-user-room')
 		$(event.target).addClass('active-user-room');
-		sock.emit('getRoomsUsers', {userroom: val.replace(/ /gi, "_SPACE_")})
+		//sock.emit('getRoomsUsers', {userroom: classFix}) NEEDS ACTUAL ROOM NAME
 		roomName.innerHTML = val;
 
-	} else if (event.target.tagName === 'A') {
-		let roomListFirst = $('.user-room-list li').first();
-		let roomFirst = roomListFirst.text().slice(0, -1).replace(/ /gi, "_SPACE_");
-		let roomListLast = $('.user-room-list li').last();
-		let roomLast = roomListLast.text().slice(0, -1).replace(/ /gi, "_SPACE_");
-		let parentRoom = tar.text().slice(0, -1).replace(/ /gi, "_SPACE_");
 
-		if (roomFirst != roomLast) {
-			/*
-			console.log('roomFirst = ' + roomFirst)
-			console.log('val = ' + valPersist)
-			*/
-			sock.emit('leaveRoom', {userroom: tartext.replace(/ /gi, "_SPACE_")});
-			sock.emit('getRoomList');
-			tar.remove();
-			$('.events-table-' + tartext.replace(/ /gi, "_SPACE_")).remove();
 
-			if (tar.hasClass('active-user-room') === true) {
-				$('.events-tables').children().hide();
-				/*
-				console.log('first room: ' + roomFirst);
-				console.log('last room: ' + roomLast);
-				console.log('target room: ' + tartext);
-				*/
 
-				if (parentRoom === roomFirst) {
-					$('.events-table-' + roomLast).show();
-					roomListLast.addClass('active-user-room');
-					roomName.innerHTML = roomLast.replace(/_SPACE_/gi, " ");
-					sock.emit('updateuserslist', {userroom: roomLast});
+	} else {
+
+		if (event.target.tagName === 'LI') {
+			$('.events-tables').children().hide();
+			$('.events-table-' + val.replace(/ /gi, "_SPACE_")).show();
+			$('.user-room-list').children().removeClass('active-user-room')
+			$(event.target).addClass('active-user-room');
+			sock.emit('getRoomsUsers', {userroom: val.replace(/ /gi, "_SPACE_")})
+			roomName.innerHTML = val;
+
+		} else if (event.target.tagName === 'A') {
+				let roomListFirst = $('.user-room-list li').first();
+				let roomFirst = roomListFirst.text().slice(0, -1).replace(/ /gi, "_SPACE_");
+				let roomListLast = $('.user-room-list li').last();
+				let roomLast = roomListLast.text().slice(0, -1).replace(/ /gi, "_SPACE_");
+				let parentRoom = tar.text().slice(0, -1).replace(/ /gi, "_SPACE_");
+
+				if (roomFirst != roomLast) {
+					sock.emit('leaveRoom', {userroom: tartext.replace(/ /gi, "_SPACE_")});
+					sock.emit('getRoomList');
+					tar.remove();
+					$('.events-table-' + tartext.replace(/ /gi, "_SPACE_")).remove();
+
+					if (tar.hasClass('active-user-room') === true) {
+						$('.events-tables').children().hide();
+
+						if (parentRoom === roomFirst) {
+							$('.events-table-' + roomLast).show();
+							roomListLast.addClass('active-user-room');
+							roomName.innerHTML = roomLast.replace(/_SPACE_/gi, " ");
+							sock.emit('updateuserslist', {userroom: roomLast});
+						} else {
+							$('.events-table-' + roomFirst).show();
+							roomListFirst.addClass('active-user-room');
+							roomName.innerHTML = roomFirst.replace(/_SPACE_/gi, " ");
+							sock.emit('updateuserslist', {userroom: roomFirst});
+						}
+					}
 				} else {
-					$('.events-table-' + roomFirst).show();
-					roomListFirst.addClass('active-user-room');
-					roomName.innerHTML = roomFirst.replace(/_SPACE_/gi, " ");
-					sock.emit('updateuserslist', {userroom: roomFirst});
+					console.log('Cannot leave only open room.') // this prevents from closing a room if only one is open.
 				}
-			}
-		} else {
-			console.log('Cannot leave only open room.') // this prevents from closing a room if only one is open.
-
 		}
 	}
 });

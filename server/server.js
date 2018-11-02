@@ -291,7 +291,8 @@ fix name duplicate support!
 				}	else {
 					let uor = users.getUserFromName(userOldRoom)
 					if (uor) {
-						userOldRoom = `#_${uor.id}`
+						console.log('adsd')
+						//userOldRoom = `#_${uor.id}`
 					}
 
 
@@ -312,36 +313,45 @@ fix name duplicate support!
 	});
 // add random number to end of userID then both join that ROOM, so it
 // is a room that messages can be emitted to.
-
-
 	sock.on('sendPrivateMessage', (data) => {
-		let rNum = Math.floor(Math.random() * 99999);
+		sendPrivateMessageFunc(data);
+	});
+
+
+	function sendPrivateMessageFunc(data) {
+		function randomNum() {
+			return Math.floor(Math.random() * 999999);
+		};
+
+		let rNum = randomNum();
+		let roomname = data.roomname;
 		let usern = data.username;
+		let roomId = `roomID_${rNum}`;
 		let userObj = users.getUserFromName(usern);
 		let userid = userObj.id;
-		let userPmRoom = `pm_${userid}`
+		let userPmRoom = `pm-${rNum}`;
 
 		// requesting socket joins PM room
 		user.room.push(userPmRoom);
 		sock.join(userPmRoom);
 		// add requested socket to PM room
 		userObj.room.push(userPmRoom);
-		io.to(userid).emit('requestPrivate', {userroom: userPmRoom})
+		io.to(userid).emit('requestPrivate', {userroom: userPmRoom});
 
 
 
 		console.log(`usern: ${usern} ** userid: ${userid} ** userPmRoom: ${userPmRoom}` );
 
 
-		io.to(userid).emit('privateMessage', {userid: userid, username: user.name, userroom: userPmRoom});
-		io.to(userid).emit('updateroomname', userPmRoom);
+		io.to(userid).emit('privateMessage', {userid: userid, username: user.name, userroom: userPmRoom, roomid: roomId});
+		io.to(userid).emit('updateroomname', roomname);
 
-		io.to(user.id).emit('privateMessage', {userid: userid, username: usern, userroom: userPmRoom});
-		io.to(userid).emit('updateroomname', userPmRoom);
+		io.to(user.id).emit('privateMessage', {userid: userid, username: usern, userroom: userPmRoom, roomid: roomId});
+		io.to(user.id).emit('updateroomname', roomname);
 
 		io.to(userPmRoom).emit('message', {userroom: userPmRoom, username: 'Admin', message: 'New Private Message Session'})
 
-	});
+	};
 
 	sock.on('requestPrivateResponse', (data) => {
 		let userPmRoom = data.userroom;
