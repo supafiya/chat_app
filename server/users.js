@@ -42,7 +42,7 @@ class Users {
 			let usersRooms = usersArr[i].room;
 			for(let k = 0, length3 = usersRooms.length; k < length3; k++){
 				let currentRoom = usersRooms[k]
-				if (!roomArr.includes(usersRooms[k])) {
+				if (!roomArr.includes(usersRooms[k]) && usersRooms[k].slice(0, 3) != 'pm-') {
 					roomArr.push(usersRooms[k])
 				}
 			}

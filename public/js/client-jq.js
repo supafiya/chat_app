@@ -76,11 +76,11 @@ $('ul.user-room-list').on('click', (event) => {
 	let tartext = tar.text().slice(0, -1)
 	const roomName = document.querySelector('#room-name');
 	let ulClassLi = event.target.classList;
-	console.log(ulClassLi)
+	//console.log(ulClassLi)
 	let classFix;
 
 	for(let i = 0, length1 = ulClassLi.length; i < length1; i++){
-		console.log(': class loop: ' + ulClassLi[i])
+		//console.log(': class loop: ' + ulClassLi[i])
 		if (ulClassLi[i].slice(0, 6) === 'roomID') {
 			classFix = ulClassLi[i]
 		}

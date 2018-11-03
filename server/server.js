@@ -331,25 +331,25 @@ fix name duplicate support!
 		let userid = userObj.id;
 		let userPmRoom = `pm-${rNum}`;
 
-		// requesting socket joins PM room
-		user.room.push(userPmRoom);
-		sock.join(userPmRoom);
-		// add requested socket to PM room
-		userObj.room.push(userPmRoom);
-		io.to(userid).emit('requestPrivate', {userroom: userPmRoom});
 
+		if (usern != user.name) {
+				// requesting socket joins PM room
+			user.room.push(userPmRoom);
+			sock.join(userPmRoom);
 
+			// add requested socket to PM room
+			userObj.room.push(userPmRoom);
 
-		console.log(`usern: ${usern} ** userid: ${userid} ** userPmRoom: ${userPmRoom}` );
+			io.to(userid).emit('requestPrivate', {userroom: userPmRoom});
 
+			io.to(userid).emit('privateMessage', {userid: userid, username: user.name, userroom: userPmRoom, roomid: roomId});
+			io.to(userid).emit('updateroomname', users.getUser(sock.id).name);
 
-		io.to(userid).emit('privateMessage', {userid: userid, username: user.name, userroom: userPmRoom, roomid: roomId});
-		io.to(userid).emit('updateroomname', roomname);
+			io.to(user.id).emit('privateMessage', {userid: userid, username: usern, userroom: userPmRoom, roomid: roomId});
+			io.to(user.id).emit('updateroomname', roomname);
 
-		io.to(user.id).emit('privateMessage', {userid: userid, username: usern, userroom: userPmRoom, roomid: roomId});
-		io.to(user.id).emit('updateroomname', roomname);
-
-		io.to(userPmRoom).emit('message', {userroom: userPmRoom, username: 'Admin', message: 'New Private Message Session'})
+			io.to(userPmRoom).emit('message', {userroom: userPmRoom, username: 'Admin', message: 'New Private Message Session'});
+		};
 
 	};
 

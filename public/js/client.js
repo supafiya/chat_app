@@ -37,12 +37,7 @@ const onChatFormSubmitted = (event) => {
 		sock.emit('userMessage', {message: text, userroom: pmRoomNum});
 	} else {
 		sock.emit('userMessage', {message: text, userroom: roomfix});
-		console.log('message sent to: ' + aur)
-
 	}
-
-
-
 };
 
 // receive message information from the server
@@ -54,7 +49,6 @@ sock.on('message', (data) => {
 	let userbgColor = data.userColorBG;
 
 	const parent = document.querySelector(`.events-table-${room}`);
-	console.log('in message func ' + room)
 
 	if (data.username === 'Admin') {
 		parent.innerHTML += `
